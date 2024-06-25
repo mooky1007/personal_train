@@ -2,6 +2,7 @@ class PersonalTrainApp {
     constructor() {
         this.userName = '';
         this.data = {};
+        this.point = 0;
 
         this.train = [
             {
@@ -76,6 +77,7 @@ class PersonalTrainApp {
             this.createTrainList(data.data);
             this.train = data.train;
             this.userName = data.userName;
+            this.point = data.point;
         }
 
         this.insertName();
@@ -129,7 +131,7 @@ class PersonalTrainApp {
 
             div.append(p);
 
-            const countArr = [1, 5, 10];
+            const countArr = [1, 5, 10, 25];
 
             countArr.forEach((el) => {
                 const button = document.createElement('button');
@@ -137,6 +139,7 @@ class PersonalTrainApp {
                 button.innerHTML = `+${el}`;
                 button.addEventListener('click', () => {
                     this.addValue(el, train);
+                    document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
                 });
 
                 div.append(button);
@@ -148,10 +151,12 @@ class PersonalTrainApp {
             button.innerHTML = `초기화`;
             button.addEventListener('click', () => {
                 this.addValue(0, train);
+                document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
             });
 
             div.append(button);
 
+            document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
             document.querySelector('.overview').append(div);
         });
     }
@@ -160,6 +165,7 @@ class PersonalTrainApp {
         const count = +value;
         if (count === 0) {
             if (this.data[this.today].trainList[train.id]) {
+                this.point -= this.data[this.today].trainList[train.id].count;
                 delete this.data[this.today].trainList[train.id];
             }
             this.data[this.today].render();
@@ -169,6 +175,7 @@ class PersonalTrainApp {
 
         if (this.data[this.today].trainList[train.id]) {
             this.data[this.today].trainList[train.id].count += +count;
+            this.point += count;
         } else {
             this.data[this.today].trainList[train.id] = {
                 id: train.id,
@@ -176,6 +183,7 @@ class PersonalTrainApp {
                 count: +count,
                 defaultCount: train.defaultCount,
             };
+            this.point += count;
         }
 
         if (this.data[this.today].trainList[train.id].count > train.defaultCount) {

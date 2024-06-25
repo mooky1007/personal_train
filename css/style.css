@@ -32,6 +32,15 @@ main {
     min-height: 200px;
     background: #222;
     color: #fff;
+    position: relative;
+}
+
+.point {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    font-size: 12px;
 }
 
 .overview .continuityDay {
