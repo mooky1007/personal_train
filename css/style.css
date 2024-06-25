@@ -1,0 +1,106 @@
+@font-face {
+    font-family: 'Ownglyph_ryuttung-Rg';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_ryuttung-Rg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ownglyph_ryuttung-Rg';
+}
+
+body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    background: #333;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    max-width: 480px;
+}
+
+.overview {
+    width: 100%;
+    height: 200px;
+    background: #222;
+    color: #fff;
+}
+
+.overview .continuityDay {
+    margin-bottom: 20px;
+}
+
+.overview .row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.overview .row .title {
+    width: 20%;
+}
+
+.overview .row button {
+    border: none;
+    background: #111;
+    color: #fff;
+    width: 48px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.overview .row + .row {
+    margin-top: 10px;
+}
+
+.train_date_block {
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+
+section {
+    padding: 5%;
+}
+
+.data_list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.data_list li {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.data_list li .date {
+    font-size: 11px;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.data_list li .row {
+    display: flex;
+    font-size: 13px;
+    color: #fff;
+    flex-wrap: wrap;
+}
+
+.data_list li .row .train_name {
+    width: 20%;
+    margin-bottom: 5px;
+}
+
+.data_list li .row .train_goal {
+    margin-left: auto;
+}
