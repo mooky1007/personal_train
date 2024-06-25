@@ -101,6 +101,10 @@ section {
     flex-wrap: wrap;
 }
 
+.data_list li .row + .row {
+    margin-top: 10px;
+}
+
 .data_list li .row .train_name {
     width: 20%;
     margin-bottom: 5px;
@@ -117,4 +121,20 @@ section {
     margin-top: 10px;
     color: #fff;
     background: #000;
+}
+
+.gage {
+    width: 100%;
+    height: 3px;
+    background: #555;
+    position: relative;
+    overflow: hidden;
+}
+
+.gage_inner {
+    position: absolute;
+    top: 0;
+    width: 0;
+    background: #51f375;
+    height: 100%;
 }

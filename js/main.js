@@ -125,7 +125,7 @@ class PersonalTrainApp {
             div.classList.add('row');
             const p = document.createElement('p');
             p.classList.add('title');
-            p.innerText = `${train.name}(${train.defaultCount})`;
+            p.innerText = `${train.name}`;
 
             div.append(p);
 
@@ -227,6 +227,9 @@ class PersonalTrainDay {
                     <span class="train_name">[${this.trainList[key].name}]</span>
                     <span class="train_count">${this.trainList[key].count}개</span>
                     <span class="train_goal">${this.trainList[key].defaultCount}개</span>
+                    <span class="gage">
+                        <span class="gage_inner" style="width: ${(this.trainList[key].count / this.trainList[key].defaultCount) * 100}%"></span>
+                    </span>
                 `;
 
                 this.el.append(block);
