@@ -34,10 +34,10 @@ class PersonalTrainApp {
         this.init();
 
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
-        document.querySelector('.all_reset').addEventListener('click', ()=>{
+        document.querySelector('.all_reset').addEventListener('click', () => {
             window.localStorage.removeItem('train');
             window.location.reload();
-        })
+        });
     }
 
     get today() {
@@ -158,9 +158,9 @@ class PersonalTrainApp {
 
     addValue = (value, train) => {
         const count = +value;
-        if(count === 0){
+        if (count === 0) {
             if (this.data[this.today].trainList[train.id]) {
-                this.data[this.today].trainList[train.id].count = 0;
+                delete this.data[this.today].trainList[train.id];
             }
             this.data[this.today].render();
             this.save();
@@ -220,9 +220,8 @@ class PersonalTrainDay {
             Object.keys(this.trainList).forEach((key) => {
                 const block = document.createElement('div');
                 block.classList.add('row');
-                if (this.trainList[key].count > this.trainList[key].defaultCount) {
-                    block.style.cssText = `color: yellow;`;
-                }
+                if (this.trainList[key].count > this.trainList[key].defaultCount) block.style.cssText = `color: yellow;`;
+                if (this.trainList[key].count === this.trainList[key].defaultCount) block.style.cssText = `color: #51f375;`;
 
                 block.innerHTML = `
                     <span class="train_name">[${this.trainList[key].name}]</span>
