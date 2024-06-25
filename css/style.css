@@ -29,7 +29,7 @@ main {
 
 .overview {
     width: 100%;
-    height: 200px;
+    min-height: 200px;
     background: #222;
     color: #fff;
 }
@@ -55,6 +55,11 @@ main {
     width: 48px;
     height: 24px;
     cursor: pointer;
+}
+
+.overview .row button.reset {
+    background: #8c1717;
+    margin-left: auto;
 }
 
 .overview .row + .row {
@@ -103,4 +108,13 @@ section {
 
 .data_list li .row .train_goal {
     margin-left: auto;
+}
+
+.all_reset {
+    border: none;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 10px;
+    color: #fff;
+    background: #000;
 }

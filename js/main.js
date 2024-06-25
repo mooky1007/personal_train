@@ -19,11 +19,25 @@ class PersonalTrainApp {
                 name: '스쿼트',
                 defaultCount: 20,
             },
+            {
+                id: 'crunch',
+                name: '크런치',
+                defaultCount: 20,
+            },
+            {
+                id: 'slow_buffytest',
+                name: '슬로우버피',
+                defaultCount: 20,
+            },
         ];
 
         this.init();
 
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
+        document.querySelector('.all_reset').addEventListener('click', ()=>{
+            window.localStorage.removeItem('train');
+            window.location.reload();
+        })
     }
 
     get today() {
@@ -68,11 +82,11 @@ class PersonalTrainApp {
     }
 
     insertName() {
-        if(this.userName === '' || !this.userName || this.userName === 'null'){
+        if (this.userName === '' || !this.userName || this.userName === 'null') {
             const name = window.prompt('이름을 입력해주세요.');
-            if(!name || name === ''){
+            if (!name || name === '') {
                 this.insertName();
-            }else{
+            } else {
                 this.userName = name;
             }
         }
@@ -111,20 +125,32 @@ class PersonalTrainApp {
             div.classList.add('row');
             const p = document.createElement('p');
             p.classList.add('title');
-            p.innerText = train.name;
+            p.innerText = `${train.name}(${train.defaultCount})`;
 
             div.append(p);
 
             const countArr = [1, 5, 10];
 
-            countArr.forEach(el => {
+            countArr.forEach((el) => {
                 const button = document.createElement('button');
                 button.setAttribute('type', 'button');
                 button.innerHTML = `+${el}`;
-                button.addEventListener('click', () => {this.addValue(el, train)})
+                button.addEventListener('click', () => {
+                    this.addValue(el, train);
+                });
 
                 div.append(button);
-            })
+            });
+
+            const button = document.createElement('button');
+            button.setAttribute('type', 'button');
+            button.classList.add('reset');
+            button.innerHTML = `초기화`;
+            button.addEventListener('click', () => {
+                this.addValue(0, train);
+            });
+
+            div.append(button);
 
             document.querySelector('.overview').append(div);
         });
@@ -132,6 +158,15 @@ class PersonalTrainApp {
 
     addValue = (value, train) => {
         const count = +value;
+        if(count === 0){
+            if (this.data[this.today].trainList[train.id]) {
+                this.data[this.today].trainList[train.id].count = 0;
+            }
+            this.data[this.today].render();
+            this.save();
+            return;
+        }
+
         if (this.data[this.today].trainList[train.id]) {
             this.data[this.today].trainList[train.id].count += +count;
         } else {
@@ -175,18 +210,18 @@ class PersonalTrainDay {
             date.classList.add('date');
             date.innerHTML = `${new Date(this.date).toLocaleDateString('ko-KR', this.dateOption)}`;
             this.el.append(date);
-            if(Object.keys(this.trainList).length === 0){
+            if (Object.keys(this.trainList).length === 0) {
                 const block = document.createElement('div');
                 block.classList.add('row');
-                block.innerHTML = `<span class="no-data">오늘 운동기록이 없습니다.<span>`
+                block.innerHTML = `<span class="no-data">오늘 운동기록이 없습니다.<span>`;
                 this.el.append(block);
             }
 
             Object.keys(this.trainList).forEach((key) => {
                 const block = document.createElement('div');
                 block.classList.add('row');
-                if(this.trainList[key].count > this.trainList[key].defaultCount){
-                    block.style.cssText = `color: yellow;`
+                if (this.trainList[key].count > this.trainList[key].defaultCount) {
+                    block.style.cssText = `color: yellow;`;
                 }
 
                 block.innerHTML = `
