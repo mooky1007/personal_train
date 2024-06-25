@@ -1,5 +1,6 @@
 class PersonalTrainApp {
     constructor() {
+        this.userName = '';
         this.data = {};
 
         this.train = [
@@ -22,7 +23,7 @@ class PersonalTrainApp {
 
         this.init();
 
-        document.querySelector('.overview .continuityDay strong').innerHTML = this.continuityDay;
+        document.querySelector('#continuityCount').innerHTML = this.continuityDay;
     }
 
     get today() {
@@ -60,7 +61,23 @@ class PersonalTrainApp {
             data = JSON.parse(data);
             this.createTrainList(data.data);
             this.train = data.train;
+            this.userName = data.userName;
         }
+
+        this.insertName();
+    }
+
+    insertName() {
+        if(this.userName === '' || !this.userName || this.userName === 'null'){
+            const name = window.prompt('이름을 입력해주세요.');
+            if(!name || name === ''){
+                this.insertName();
+            }else{
+                this.userName = name;
+            }
+        }
+
+        document.querySelector('#username').innerHTML = this.userName;
     }
 
     save() {
@@ -158,6 +175,13 @@ class PersonalTrainDay {
             date.classList.add('date');
             date.innerHTML = `${new Date(this.date).toLocaleDateString('ko-KR', this.dateOption)}`;
             this.el.append(date);
+            if(Object.keys(this.trainList).length === 0){
+                const block = document.createElement('div');
+                block.classList.add('row');
+                block.innerHTML = `<span class="no-data">오늘 운동기록이 없습니다.<span>`
+                this.el.append(block);
+            }
+
             Object.keys(this.trainList).forEach((key) => {
                 const block = document.createElement('div');
                 block.classList.add('row');
