@@ -121,7 +121,7 @@ section {
 }
 
 .data_list::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .data_list li {
@@ -181,6 +181,7 @@ section {
 }
 
 .float_pannel {
+    z-index: 2;
     position: fixed;
     bottom: -100%;
     width: 100%;
@@ -366,6 +367,18 @@ header span:last-child span {
     background: #fff;
 }
 
+.open header span:last-child span:nth-of-type(1) {
+  transform: translateY(7px) rotate(45deg)
+}
+
+.open header span:last-child span:nth-of-type(3) {
+  transform: translateY(-7px) rotate(-45deg)
+}
+
+.open header span:last-child span:nth-of-type(2) {
+  display: none;
+}
+
 .button_group {
     display: flex;
     overflow: hidden;
@@ -382,6 +395,23 @@ header span:last-child span {
 }
 
 .last_button_wrap {
-  padding: 20px;
-  background: #222;
+    padding: 20px;
+    background: #222;
+}
+
+aside {
+    position: fixed;
+    right: -100%;
+    top: 52px;
+    height: calc(100% - 52px);
+    width: 90%;
+    background: #111;
+    z-index: 3;
+    transition: 0.4s;
+    box-shadow: -5px 0 10px rgba(0,0,0,0.5);
+    padding: 20px;
+}
+
+.open aside {
+  right: 0;
 }

@@ -81,6 +81,11 @@ class PersonalTrainApp {
         document.querySelector('.my_data').addEventListener('click', () => {
             this.controlBottomFloat('infor');
         });
+
+        document.querySelector('#aside_open').addEventListener('click', () => {
+          document.querySelector('body').classList.toggle('open');
+          this.controlBottomFloat();
+        });
     }
 
     getLocalData() {
