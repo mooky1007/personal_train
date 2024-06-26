@@ -35,15 +35,24 @@ class PersonalTrainApp {
         this.init();
 
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
-        document.querySelector('.all_reset').addEventListener('click', () => {
-            window.localStorage.removeItem('train');
-            window.location.reload();
+        // document.querySelector('.all_reset').addEventListener('click', () => {
+        //     window.localStorage.removeItem('train');
+        //     window.location.reload();
+        // });
+
+        document.querySelector('.drop_row').addEventListener('click', e => {
+            document.querySelector('.float_pannel').classList.remove('on');
         });
+
+        document.querySelector('.up_btn').addEventListener('click', e => {
+            document.querySelector('.float_pannel').classList.toggle('on');
+        });
+        
     }
 
     get today() {
         let date = new Date();
-        date.setDate(date.getDate());
+        date.setDate(date.getDate() - 7);
         return `train_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     }
 
@@ -113,6 +122,7 @@ class PersonalTrainApp {
     }
 
     createTrainList(data = {}) {
+        document.querySelector('main ul').innerHTML = '';
         const dataArr = Object.values(data).sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
         });
@@ -157,8 +167,10 @@ class PersonalTrainApp {
             div.append(button);
 
             document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
-            document.querySelector('.overview').append(div);
+            document.querySelector('.float_pannel').append(div);
         });
+
+        this.createTrainList(this.data);
     }
 
     addValue = (value, train) => {

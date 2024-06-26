@@ -17,22 +17,27 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 main {
     background: #333;
     width: 100%;
-    height: 100%;
-    min-height: 100vh;
+    height: 100svh;
     max-width: 480px;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .overview {
     width: 100%;
-    min-height: 200px;
+    min-height: 100px;
     background: #222;
     color: #fff;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .point {
@@ -47,34 +52,6 @@ main {
     margin-bottom: 20px;
 }
 
-.overview .row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.overview .row .title {
-    width: 20%;
-}
-
-.overview .row button {
-    border: none;
-    background: #111;
-    color: #fff;
-    width: 48px;
-    height: 24px;
-    cursor: pointer;
-}
-
-.overview .row button.reset {
-    background: #8c1717;
-    margin-left: auto;
-}
-
-.overview .row + .row {
-    margin-top: 10px;
-}
-
 .train_date_block {
     padding: 15px;
     border: 1px solid #ddd;
@@ -84,10 +61,25 @@ section {
     padding: 5%;
 }
 
+.list_section {
+    flex: 1;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.list_section > .row {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
 .data_list {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    overflow: auto;
 }
 
 .data_list li {
@@ -146,4 +138,80 @@ section {
     width: 0;
     background: #51f375;
     height: 100%;
+}
+
+.float_pannel {
+    position: fixed;
+    bottom: -100%;
+    width: 100%;
+    min-height: 240px;
+
+    padding: 5%;
+    color: #fff;
+    background: #222;
+    border-radius: 20px 20px 0 0;
+    transition: bottom 0.3s ease-in-out;
+}
+
+.float_pannel.on {
+    bottom: 0;
+}
+
+.float_pannel .row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.float_pannel .row .title {
+    width: 20%;
+}
+
+.float_pannel .row button {
+    border: none;
+    background: #111;
+    color: #fff;
+    width: 48px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.float_pannel .row button.reset {
+    background: #8c1717;
+    margin-left: auto;
+}
+
+.float_pannel .row + .row {
+    margin-top: 10px;
+}
+
+.drop_row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.down_btn {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+    transform-origin: center;
+    position: relative;
+    bottom: 15px;
+}
+
+.up_btn {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: auto;
+}
+
+.infor {
+    display: flex;
+    width: 100%;
+    gap: 15px;
+    font-size: 13px;
 }
