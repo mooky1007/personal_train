@@ -1,8 +1,8 @@
 @font-face {
-  font-family: 'NEXON Lv1 Gothic OTF';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'NEXON Lv1 Gothic OTF';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 * {
@@ -32,25 +32,47 @@ main {
 
 .overview {
     width: 100%;
+}
+
+.swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
+  opacity: 0 !important;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+  font-size: 14px;
+  color: #fff;
+}
+
+.swiper-button-next, .swiper-rtl .swiper-button-prev {
+  right: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.swiper-button-prev, .swiper-rtl .swiper-button-next {
+  left: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.swiper-slide {
+    width: 100%;
     min-height: 100px;
     background: #222;
     color: #fff;
     position: relative;
-    display: flex;
-    flex-direction: column;
+    padding: 20px;
 }
 
 .continuityDay {
-  position: relative;
-  line-height: 1.3;
+    position: relative;
+    line-height: 1.3;
 }
 
-.overview > div {
-  padding: 10px 0;
+.swiper-slide > div {
+    padding: 10px 0;
 }
 
-.overview > div + div {
-  border-top: 1px solid #888;
+.swiper-slide > div + div {
+    border-top: 1px solid #888;
 }
 
 .point {
@@ -234,90 +256,90 @@ section {
 }
 
 .infor p {
-  display: flex;
-  gap: 10px;
-  width: 100%;
+    display: flex;
+    gap: 10px;
+    width: 100%;
 }
 
 .infor p span {
-  position: relative;
-  display: flex;
-  gap: 3px;
-  align-items: flex-end;
-  flex-shrink: 0;
-  white-space: nowrap;
+    position: relative;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .infor p span:first-child {
-  width: auto;
+    width: auto;
 }
 
 .float_pannel input[type='number'] {
-  border: none;
-  border-bottom: 1px solid #ddd;
-  background: transparent;
-  padding: 5px;
-  color: #fff;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background: transparent;
+    padding: 5px;
+    color: #fff;
 }
 
 .float_pannel input[type='number']:focus {
-  outline: none;
+    outline: none;
 }
 
 .sub_span {
-  font-size: 9px;
-  color: #ddd;
+    font-size: 9px;
+    color: #ddd;
 }
 
 i {
-  font-style: normal;
-  font-size: 6px !important;
-  position: relative;
-  top: -1px;
+    font-style: normal;
+    font-size: 6px !important;
+    position: relative;
+    top: -1px;
 }
 
 .today_goal p {
-  font-size: 14px;
-  margin-bottom: 5px;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .today_goal li {
-  list-style: none;
-  font-size: 11px;
+    list-style: none;
+    font-size: 11px;
 }
 
 .today_goal li + li {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .today_goal li::before {
-  content: '- ';
-  font-size: 8px;
+    content: '- ';
+    font-size: 8px;
 }
 
 header {
-  padding: 0 20px;
-  width: 100%;
-  height: 52px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #000;
-  color: #fff;
-  font-size: 13px;
+    padding: 0 20px;
+    width: 100%;
+    height: 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000;
+    color: #fff;
+    font-size: 13px;
 }
 
 header span:last-child {
-  width: 24px;
-  height: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
+    width: 24px;
+    height: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
 }
 
 header span:last-child span {
-  width: 100%;
-  height: 2px;
-  background: #fff;
+    width: 100%;
+    height: 2px;
+    background: #fff;
 }

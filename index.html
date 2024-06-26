@@ -5,11 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calisthenics</title>
-  <link rel="manifest" href="./manifest.json?update=2406261803">
+  <link rel="manifest" href="./manifest.json?update=2406261926">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
-  <link rel="stylesheet" href="./css/style.css?update=2406261803">
-  <script src="./js/main.js?update=2406261803"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="./css/style.css?update=2406261926">
+  <script src="./js/main.js?update=2406261926"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 </head>
 
 <body>
@@ -22,35 +26,42 @@
         <span></span>
       </span>
     </header>
-    <section style="padding: 10px 20px;">
-      <canvas id="myChart" height="150"></canvas>
     </section>
-    <section class="overview">
-      <div class="continuityDay">
-        <strong id="username"></strong>님,<br>
-        <strong id="continuityCount">0</strong>일 연속 도전중!
-      </div>
+    <section class="overview swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="continuityDay">
+            <strong id="username"></strong>님,<br>
+            <strong id="continuityCount">0</strong>일 연속 도전중!
+          </div>
 
-      <div class="today_goal">
-        <p>오늘 해야할 운동</p>
-        <ul>
-        </ul>
-      </div>
+          <div class="today_goal">
+            <p>오늘 해야할 운동</p>
+            <ul>
+            </ul>
+          </div>
 
-      <div class="infor">
-        <p>
-          <span>체중 :</span>
-          <span id="weight">-</span>
-        </p>
-        <p>
-          <span>골격근 :</span>
-          <span id="muscle">-</span>
-        </p>
-        <p>
-          <span>체지방 :</span>
-          <span id="bodyFat">-</span>
-        </p>
+          <div class="infor">
+            <p>
+              <span>체중 :</span>
+              <span id="weight">-</span>
+            </p>
+            <p>
+              <span>골격근 :</span>
+              <span id="muscle">-</span>
+            </p>
+            <p>
+              <span>체지방 :</span>
+              <span id="bodyFat">-</span>
+            </p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <canvas id="myChart" height="180"></canvas>
+        </div>
       </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
     </section>
     <section class="list_section">
       <ul class="data_list">
@@ -128,6 +139,14 @@
     app.chart = chart;
 
     app.renderChart();
+
+    new Swiper('.swiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+
+    })
   </script>
 </body>
 

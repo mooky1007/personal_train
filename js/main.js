@@ -1,5 +1,5 @@
 class PersonalTrainApp {
-    #todayOffset = 3;
+    #todayOffset = 4;
     #defaultTrain = [
         { id: 'pushup', name: '푸쉬업', defaultCount: 15 },
         { id: 'pullup', name: '풀업', defaultCount: 5 },
@@ -310,14 +310,7 @@ class PersonalTrainApp {
         const colors = ['#f35151', '#f3bf51', '#5188f3', '#8cf351', '#a851f3'];
 
         if (this.chart) {
-            this.chart.data.labels = [...Object.values(this.data)]
-                .map((el) =>
-                    new Date(el.date).toLocaleDateString('ko-KR', {
-                        month: 'numeric',
-                        day: 'numeric',
-                    })
-                )
-                .sort((a, b) => new Date(a) - new Date(b));
+            this.chart.data.labels = [];
 
             this.train.forEach((el, idx) => {
                 this.chart.data.datasets[idx] = {
@@ -328,22 +321,29 @@ class PersonalTrainApp {
                     backgroundColor: colors[idx],
                     borderWidth: 2,
                     tension: 0.3,
-                    // pointStyle: false
                     radius: 1,
                 };
             });
 
-            [...Object.values(this.data)].forEach((el) => {
-                [...Object.keys(el.trainList)].forEach((key) => {
-                    const target = this.chart.data.datasets.find(({ label }) => label === el.trainList[key].name);
+            [...Object.values(this.data)]
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .forEach((item) => {
+                    this.chart.data.labels.push(
+                        new Date(item.date).toLocaleDateString('ko-KR', {
+                            month: 'numeric',
+                            day: 'numeric',
+                        })
+                    );
 
-                    target.data.push(el.trainList[key].count);
+                    this.chart.data.datasets.forEach((el) => {
+                        const target = Object.values(item.trainList).find(({ name }) => name === el.label);
+                        if (target) {
+                            el.data.push(target.count);
+                        } else {
+                            el.data.push(0);
+                        }
+                    });
                 });
-            });
-
-            this.chart.data.datasets.forEach(el => {
-              el.data = [...el.data].reverse();
-            })
 
             this.chart.update();
         }
@@ -352,9 +352,9 @@ class PersonalTrainApp {
     addValue = (value, train) => {
         const count = +value;
         if (count === 0) {
-            // if (this.data[this.today].trainList[train.id]) {
-            //     delete this.data[this.today].trainList[train.id];
-            // }
+            if (this.data[this.today].trainList[train.id]) {
+                delete this.data[this.today].trainList[train.id];
+            }
             this.data[this.today].render();
             this.save();
             return;
