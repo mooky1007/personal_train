@@ -156,7 +156,12 @@ class PersonalTrainApp {
         const dataArr = Object.values(data).sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
         });
+
         dataArr.forEach((trainItem) => {
+            if((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
+            // console.log(this.data[trainItem.id]);
+            // console.log(this.data[trainItem.id].trainList);
+            // console.log(this.data[trainItem.id].userInfor);
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
         });
     }
@@ -204,13 +209,13 @@ class PersonalTrainApp {
         saveButton.innerHTML = `
             <button>저장</button>
         `;
-        saveButton.style.cssText = `margin-top: auto;`
+        saveButton.style.cssText = `margin-top: auto;`;
 
         saveButton.querySelector('button').style.cssText = `
           width: 100%;
           background: #fff;
           color: #333;
-        `
+        `;
 
         saveButton.querySelector('button').addEventListener('click', () => {
             // this.userInfor.age = +ageBlock.querySelector('input').value;
