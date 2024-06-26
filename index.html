@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calisthenics</title>
-  <link rel="manifest" href="./manifest.json?update=2406261649">
+  <link rel="manifest" href="./manifest.json?update=2406261736">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
-  <link rel="stylesheet" href="./css/style.css?update=2406261649">
-  <script src="./js/main.js?update=2406261649"></script>
+  <link rel="stylesheet" href="./css/style.css?update=2406261736">
+  <script src="./js/main.js?update=2406261736"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -72,21 +72,23 @@
     const ctx = document.getElementById('myChart');
 
     const chart = new Chart(ctx, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: [],
-        datasets: [{
-          data: [],
-          barThickness: 10,
-          backgroundColor: '#51f3a1',
-          borderWidth: 1
-        }]
+        datasets: []
       },
       options: {
         animation: {
           duration: 0
         },
         scales: {
+          x: {
+            beginAtZero: true,
+            max: 5,
+            ticks: {
+              stepSize: 1
+            }
+          },
           y: {
             beginAtZero: true,
             suggestedMax: 50,
@@ -97,7 +99,8 @@
         },
         plugins: {
           legend: {
-            display: false
+            display: false,
+            position: 'bottom'
           }
         }
       }

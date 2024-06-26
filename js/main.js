@@ -102,7 +102,7 @@ class PersonalTrainApp {
     }
 
     save() {
-        const cloneApp = {...this};
+        const cloneApp = { ...this };
         delete cloneApp.chart;
         window.localStorage.setItem('train', JSON.stringify(cloneApp));
     }
@@ -306,20 +306,47 @@ class PersonalTrainApp {
         this.createTrainList(this.data);
     }
 
-    renderChart(){
-      if(this.chart){
-        this.chart.data.labels = this.#defaultTrain.map(el => el.name)
-        this.chart.data.datasets[0].data = this.#defaultTrain.map(el => 0)
-        
-        Object.values(this.data).map(el => {
-          const data = Object.values(el.trainList);
-          data.forEach(item => {
-            const idx = this.chart.data.labels.indexOf(item.name);
-            this.chart.data.datasets[0].data[idx] += item.count
-          })
-        })
-        this.chart.update();
-      }
+    renderChart() { 
+      const colors = [
+        '#f35151',
+        '#f3bf51',
+        '#5188f3',
+        '#8cf351',
+        '#a851f3'
+      ];
+
+        if (this.chart) {
+            this.chart.data.labels = Object.values(this.data)
+                .map((el) => el.date)
+                .reverse()
+                .slice(0, 15);
+
+            this.train.forEach((el, idx) => {
+                this.chart.data.datasets[idx] = {
+                    label: el.id,
+                    data: [],
+                    barThickness: 10,
+                    borderColor: colors[idx],
+                    backgroundColor: colors[idx],
+                    borderWidth: 2,
+                    tension: 0.3,
+                    // pointStyle: false
+                };
+            });
+
+            Object.values(this.data)
+                .reverse()
+                .slice(0, 15)
+                .forEach((el) => {
+                    Object.keys(el.trainList).forEach((key) => {
+                        const target = this.chart.data.datasets.find(({ label }) => label === key);
+
+                        target.data.push(el.trainList[key].count);
+                    });
+                });
+
+            this.chart.update();
+        }
     }
 
     addValue = (value, train) => {
