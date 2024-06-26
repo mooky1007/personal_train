@@ -89,7 +89,7 @@ main {
 
 .train_date_block {
     padding: 15px;
-    border: 1px solid #ddd;
+    border: 1px solid #666;
 }
 
 section {
@@ -103,7 +103,7 @@ section {
     display: flex;
     flex-direction: column;
 
-    padding-top: 0;
+    padding: 0;
 }
 
 .list_section > .row {
@@ -117,13 +117,18 @@ section {
     flex-direction: column;
     gap: 5px;
     overflow: auto;
-    padding: 20px 0;
+    padding: 20px;
+}
+
+.data_list::-webkit-scrollbar {
+  display: none;
 }
 
 .data_list li {
     list-style: none;
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
 }
 
 .data_list li .date {
@@ -144,12 +149,9 @@ section {
     margin-top: 10px;
 }
 
-.data_list li .row .train_name {
-    width: 25%;
-}
-
+.data_list li .row .train_name,
 .data_list li .row .train_goal {
-    margin-left: auto;
+    width: 25%;
 }
 
 .my_data {
@@ -162,7 +164,7 @@ section {
 }
 
 .gage {
-    width: 100%;
+    width: 50%;
     height: 3px;
     background: #555;
     position: relative;
@@ -310,7 +312,7 @@ i {
 }
 
 .today_goal ul {
-  min-height: 100px;
+    min-height: 100px;
 }
 
 .today_goal > * {
@@ -377,4 +379,9 @@ header span:last-child span {
 
 .button_group button + button {
     border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.last_button_wrap {
+  padding: 20px;
+  background: #222;
 }
