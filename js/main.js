@@ -321,7 +321,7 @@ class PersonalTrainApp {
                     backgroundColor: colors[idx],
                     borderWidth: 2,
                     tension: 0.3,
-                    radius: 1,
+                    radius: 2,
                 };
             });
 
