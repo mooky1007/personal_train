@@ -1,5 +1,5 @@
 class PersonalTrainApp {
-    #todayOffset = 1;
+    #todayOffset = 0;
     constructor() {
         this.userName = '';
         this.data = {};
