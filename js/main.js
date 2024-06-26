@@ -51,6 +51,7 @@ class PersonalTrainApp {
                 this.renderInfor();
                 break;
             default:
+                document.querySelector('.float_pannel').classList.remove('on');
                 break;
         }
     }
@@ -140,12 +141,12 @@ class PersonalTrainApp {
             if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
 
-            this.data[trainItem.id].el.addEventListener('click', () => {
-                console.log(this.data[trainItem.id]);
-                delete this.data[trainItem.id];
+            // this.data[trainItem.id].el.addEventListener('click', () => {
+            //     console.log(this.data[trainItem.id]);
+            //     delete this.data[trainItem.id];
 
-                this.render();
-            });
+            //     this.render();
+            // });
         });
     }
 
@@ -337,9 +338,9 @@ class PersonalTrainApp {
                     barThickness: 10,
                     borderColor: colors[idx],
                     backgroundColor: colors[idx],
-                    borderWidth: 2,
+                    borderWidth: 1.5,
                     tension: 0.3,
-                    radius: 2,
+                    radius: 2.5,
                 };
             });
 
