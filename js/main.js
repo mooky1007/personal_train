@@ -177,21 +177,24 @@ class PersonalTrainApp {
         weightBlock.classList.add('row');
         weightBlock.innerHTML = `
             <span class="title">체중(kg)</span>
-            <input type="number" value=${this.userInfor.weight || 0}>
+            <input type="number" value=${this.userInfor?.weight || 0}>
+            <span>kg</span>
         `;
 
         const bodyfatBlock = document.createElement('div');
         bodyfatBlock.classList.add('row');
         bodyfatBlock.innerHTML = `
             <span class="title">체지방(%)</span>
-            <input type="number" value=${this.userInfor.bodyFat || 0}>
+            <input type="number" value=${this.userInfor?.bodyFat || 0}>
+            <span>%</span>
         `;
 
         const muscleBlock = document.createElement('div');
         muscleBlock.classList.add('row');
         muscleBlock.innerHTML = `
             <span class="title">골격근(kg)</span>
-            <input type="number" value=${this.userInfor.muscle || 0}>
+            <input type="number" value=${this.userInfor?.muscle || 0}>
+            <span>kg</span>
         `;
 
         const saveButton = document.createElement('div');
@@ -205,6 +208,7 @@ class PersonalTrainApp {
           width: 100%;
           background: #000;
           color: #fff;
+          margin-top: 20px;
         `;
 
         saveButton.querySelector('button').addEventListener('click', () => {
@@ -221,7 +225,7 @@ class PersonalTrainApp {
             this.controlBottomFloat();
         });
 
-        document.querySelector('.float_pannel').append(weightBlock, bodyfatBlock, muscleBlock, saveButton);
+        document.querySelector('.float_pannel').append(weightBlock, muscleBlock, bodyfatBlock, saveButton);
     }
 
     renderTrain() {
