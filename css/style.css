@@ -34,23 +34,27 @@ main {
     width: 100%;
 }
 
-.swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
-  opacity: 0 !important;
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+    opacity: 0 !important;
 }
 
-.swiper-button-next:after, .swiper-button-prev:after {
-  font-size: 14px;
-  color: #fff;
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 14px;
+    color: #fff;
 }
 
-.swiper-button-next, .swiper-rtl .swiper-button-prev {
-  right: 0;
-  -webkit-tap-highlight-color: transparent !important;
+.swiper-button-next,
+.swiper-rtl .swiper-button-prev {
+    right: 0;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
-.swiper-button-prev, .swiper-rtl .swiper-button-next {
-  left: 0;
-  -webkit-tap-highlight-color: transparent !important;
+.swiper-button-prev,
+.swiper-rtl .swiper-button-next {
+    left: 0;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 .swiper-slide {
@@ -202,7 +206,8 @@ section {
 }
 
 .float_pannel .row .title {
-    width: 30%;
+    width: 25%;
+    font-size: 12px;
 }
 
 .float_pannel .row button {
@@ -210,7 +215,7 @@ section {
     background: #111;
     color: #fff;
     width: 48px;
-    height: 36px;
+    height: 42px;
     cursor: pointer;
 }
 
@@ -251,8 +256,8 @@ section {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    font-size: 11px;
-    gap: 10px;
+    font-size: 10px;
+    gap: 5px;
 }
 
 .infor p {
@@ -298,8 +303,18 @@ i {
     top: -1px;
 }
 
+.today_goal {
+    display: flex;
+    gap: 20px;
+}
+
+.today_goal > * {
+    width: 100%;
+}
+
 .today_goal p {
-    font-size: 14px;
+    width: 40%;
+    font-size: 12px;
     margin-bottom: 5px;
 }
 
@@ -342,4 +357,19 @@ header span:last-child span {
     width: 100%;
     height: 2px;
     background: #fff;
+}
+
+.button_group {
+    display: flex;
+    overflow: hidden;
+    border-radius: 100px;
+    width: 100%;
+}
+
+.button_group button {
+    width: 100% !important;
+}
+
+.button_group button + button {
+    border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
 }

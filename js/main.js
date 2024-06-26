@@ -197,8 +197,8 @@ class PersonalTrainApp {
 
         saveButton.querySelector('button').style.cssText = `
           width: 100%;
-          background: #fff;
-          color: #333;
+          background: #000;
+          color: #fff;
         `;
 
         saveButton.querySelector('button').addEventListener('click', () => {
@@ -232,6 +232,9 @@ class PersonalTrainApp {
 
             const countArr = [1, 5, 10, 25];
 
+            const div2 = document.createElement('div');
+            div2.classList.add('button_group');
+
             countArr.forEach((el) => {
                 const button = document.createElement('button');
                 button.setAttribute('type', 'button');
@@ -240,7 +243,7 @@ class PersonalTrainApp {
                     this.addValue(el, train);
                 });
 
-                div.append(button);
+                div2.append(button);
             });
 
             const button = document.createElement('button');
@@ -252,7 +255,8 @@ class PersonalTrainApp {
                 this.renderChart();
             });
 
-            div.append(button);
+            div2.append(button);
+            div.append(div2);
 
             document.querySelector('.float_pannel').append(div);
         });
