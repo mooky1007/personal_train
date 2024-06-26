@@ -1,47 +1,58 @@
 class PersonalTrainApp {
     #todayOffset = 0;
+    #defaultTrain = [
+        { id: 'pushup', name: '푸쉬업', defaultCount: 15 },
+        { id: 'pullup', name: '풀업', defaultCount: 5 },
+        { id: 'squat', name: '스쿼트', defaultCount: 20 },
+        { id: 'crunch', name: '크런치', defaultCount: 20 },
+        { id: 'slow_buffytest', name: '슬로우버피', defaultCount: 20 },
+    ];
     constructor() {
         this.userName = '';
-        this.data = {};
         this.point = 0;
-
-        this.userInfor = {
-            age: null,
-            weight: null,
-            height: null,
-            bodyFat: null,
-            userInformuscle: null,
-        };
-
-        this.train = [
-            {
-                id: 'pushup',
-                name: '푸쉬업',
-                defaultCount: 15,
-            },
-            {
-                id: 'pullup',
-                name: '풀업',
-                defaultCount: 5,
-            },
-            {
-                id: 'squat',
-                name: '스쿼트',
-                defaultCount: 20,
-            },
-            {
-                id: 'crunch',
-                name: '크런치',
-                defaultCount: 20,
-            },
-            {
-                id: 'slow_buffytest',
-                name: '슬로우버피',
-                defaultCount: 20,
-            },
-        ];
+        this.train = this.#defaultTrain;
 
         this.init();
+    }
+
+    dateFormat(date) {
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    }
+
+    get today() {
+        const { dateFormat } = this;
+
+        let date = new Date();
+        date.setDate(date.getDate() + this.#todayOffset);
+        return `train_${dateFormat(date)}`;
+    }
+
+    get continuityDay() {
+        const { data, dateFormat } = this;
+
+        let date = new Date();
+        let continuityDay = 1;
+
+        while (true) {
+            date.setDate(date.getDate() - 1);
+            if (data[`train_${dateFormat(date)}`]) continuityDay++;
+            else break;
+        }
+
+        return continuityDay;
+    }
+
+    get prevUserInfor() {
+        const dataArr = Object.values(this.data).sort((a, b) => new Date(b.date) - new Date(a.date));
+        const userInforArr = dataArr.filter((el) => el.userInfor);
+        return userInforArr[1]?.userInfor || null;
+    }
+
+    init() {
+        this.getLocalData();
+        this.createTodayTrain();
+
+        this.render();
 
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
 
@@ -60,45 +71,10 @@ class PersonalTrainApp {
         });
     }
 
-    get today() {
-        let date = new Date();
-        date.setDate(date.getDate() + this.#todayOffset);
-        return `train_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    }
-
-    get continuityDay() {
-        let date = new Date();
-        let result = 1;
-
-        while (true) {
-            date.setDate(date.getDate() - 1);
-            if (this.data[`train_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`]) {
-                result++;
-            } else {
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    get prevUserInfor() {
-        const dataArr = Object.values(this.data).sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-        });
-        const userInforArr = dataArr.filter((el) => el.userInfor);
-        return userInforArr[1]?.userInfor || null;
-    }
-
-    init() {
-        this.getTrainData();
-        this.createTodayTrain();
-
-        this.render();
-    }
-
-    getTrainData() {
+    getLocalData() {
+        this.data = {};
         let data = window.localStorage.getItem('train');
+
         if (data) {
             data = JSON.parse(data);
             this.createTrainList(data.data);
@@ -118,13 +94,10 @@ class PersonalTrainApp {
     }
 
     insertName() {
-        if (this.userName === '' || !this.userName || this.userName === 'null') {
+        if (!this.userName || this.userName === '' || this.userName === 'null') {
             const name = window.prompt('이름을 입력해주세요.');
-            if (!name || name === '') {
-                this.insertName();
-            } else {
-                this.userName = name;
-            }
+            if (!name || name === '') this.insertName();
+            else this.userName = name;
         }
 
         document.querySelector('#username').innerHTML = this.userName;
@@ -140,13 +113,9 @@ class PersonalTrainApp {
     }
 
     createTodayTrain() {
-        if (!this.data[this.today]) {
-            this.data[this.today] = new PersonalTrainDay({
-                id: this.today,
-                date: this.today.replace('train_', ''),
-                trainList: {},
-            });
-        }
+        if (this.data[this.today]) return;
+
+        this.data[this.today] = new PersonalTrainDay({ id: this.today });
 
         this.save();
     }
@@ -159,9 +128,6 @@ class PersonalTrainApp {
 
         dataArr.forEach((trainItem) => {
             if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
-            // console.log(this.data[trainItem.id]);
-            // console.log(this.data[trainItem.id].trainList);
-            // console.log(this.data[trainItem.id].userInfor);
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
         });
     }
@@ -223,7 +189,6 @@ class PersonalTrainApp {
             this.userInfor.weight = +weightBlock.querySelector('input').value;
             this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
             this.userInfor.muscle = +muscleBlock.querySelector('input').value;
-
 
             this.userInforSave();
             this.render();
@@ -287,7 +252,7 @@ class PersonalTrainApp {
                     : `<i style="color: #51f375" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
             }</span>`;
         } else {
-            if (this.userInfor.weight) weight.innerHTML = parseFloat(this.userInfor.weight.toFixed(2)) + ' kg';
+            if (this.userInfor) if (this.userInfor.weight) weight.innerHTML = parseFloat(this.userInfor.weight.toFixed(2)) + ' kg';
         }
 
         if (this.prevUserInfor && +this.userInfor.muscle !== +this.prevUserInfor.muscle) {
@@ -299,7 +264,7 @@ class PersonalTrainApp {
                     : `<i style="color: #ff5252" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
             }</span>`;
         } else {
-            if (this.userInfor.muscle) muscle.innerHTML = parseFloat(this.userInfor.muscle.toFixed(2)) + ' kg';
+            if (this.userInfor) if (this.userInfor.muscle) muscle.innerHTML = parseFloat(this.userInfor.muscle.toFixed(2)) + ' kg';
         }
 
         if (this.prevUserInfor && +this.userInfor.bodyFat !== +this.prevUserInfor.bodyFat) {
@@ -311,7 +276,7 @@ class PersonalTrainApp {
                     : `<i style="color: #51f375" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} %`
             }</span>`;
         } else {
-            if (this.userInfor.bodyFat) bodyFat.innerHTML = parseFloat(this.userInfor.bodyFat.toFixed(2)) + ' %';
+            if (this.userInfor) if (this.userInfor.bodyFat) bodyFat.innerHTML = parseFloat(this.userInfor.bodyFat.toFixed(2)) + ' %';
         }
 
         document.querySelector('.today_goal ul').innerHTML = '';
@@ -380,7 +345,7 @@ class PersonalTrainDay {
     constructor(config) {
         this.id = config.id;
         this.date = config.date || config.id.replace('train_', '');
-        this.trainList = config.trainList;
+        this.trainList = config.trainList || {};
         this.userInfor = config.userInfor || null;
         this.el = null;
 
@@ -453,12 +418,5 @@ class PersonalTrainDay {
             document.querySelector('main .data_list').append(li);
             this.render();
         }
-    }
-}
-
-class PersonalTrainItem {
-    constructor(config) {
-        this.targetMuscle = config.targetMuscle;
-        this.count = config.count;
     }
 }
