@@ -1,0 +1,19 @@
+{
+  "background_color": "#333333",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "mooky1007.github",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "mooky1007.github",
+  "start_url": "/",
+  "theme_color": "#333333",
+  "icons": [
+    {
+      "src": "./images/shortcut.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "id": "personal_train_recoder"
+}
