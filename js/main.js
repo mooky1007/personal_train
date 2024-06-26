@@ -117,6 +117,7 @@ class PersonalTrainApp {
     save() {
         const cloneApp = { ...this };
         delete cloneApp.chart;
+        delete cloneApp.chart2;
         window.localStorage.setItem('train', JSON.stringify(cloneApp));
     }
 
@@ -301,28 +302,18 @@ class PersonalTrainApp {
 
         document.querySelector('.today_goal ul').innerHTML = '';
 
-        const result = this.train.every(
-            (trainItem) =>
+        this.train.forEach((trainItem) => {
+            const li = document.createElement('li');
+            const goalCheck =
                 (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
-                (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount)
-        );
+                (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount);
 
-        if (result) {
-            document.querySelector('.today_goal ul').innerHTML = `<li>오늘의 운동을 완료했습니다!</li>`;
-        } else {
-            this.train.forEach((trainItem) => {
-                const li = document.createElement('li');
-                const goalCheck =
-                    (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
-                    (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount);
-                if (goalCheck) return;
-
-                li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.id]?.count || 0}/${
-                    this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount
-                }회`;
-                document.querySelector('.today_goal ul').append(li);
-            });
-        }
+              if(goalCheck) li.style.cssText = `color: #aaa`;
+            li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.id]?.count || 0}/${
+                this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount
+            }회${goalCheck ? ` (완료)` : ''}`;
+            document.querySelector('.today_goal ul').append(li);
+        });
 
         this.renderChart();
 
@@ -331,7 +322,7 @@ class PersonalTrainApp {
 
     renderChart() {
         const colors = ['#f35151', '#f3bf51', '#5188f3', '#8cf351', '#a851f3'];
-        const skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+        const skipped = (ctx, value) => (ctx.p0.skip || ctx.p1.skip ? value : undefined);
 
         if (this.chart) {
             this.chart.data.labels = [];
@@ -348,7 +339,7 @@ class PersonalTrainApp {
                     radius: 2.5,
                     spanGaps: true,
                     segment: {
-                        borderColor: (ctx) => skipped(ctx, 'rgb(255,255,255,0.1)') || colors[idx],
+                        borderColor: (ctx) => skipped(ctx, `${colors[idx]}33`) || colors[idx],
                         borderDash: (ctx) => skipped(ctx, [5, 5]),
                     },
                 };
@@ -375,6 +366,55 @@ class PersonalTrainApp {
                 });
 
             this.chart.update();
+        }
+
+        if (this.chart2) {
+            this.chart2.data.labels = [];
+
+            [
+                { id: 'weight', name: '체중(kg)' },
+                { id: 'muscle', name: '골격근(kg)' },
+                { id: 'bodyFat', name: '체지방(%)' },
+            ].forEach((el, idx) => {
+                this.chart2.data.datasets[idx] = {
+                    id: el.id,
+                    label: el.name,
+                    data: [],
+                    barThickness: 10,
+                    borderColor: colors[idx],
+                    backgroundColor: colors[idx],
+                    borderWidth: 1.5,
+                    tension: 0.3,
+                    radius: 2.5,
+                    spanGaps: true,
+                };
+            });
+
+            [...Object.values(this.data)]
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .forEach((item) => {
+                    this.chart2.data.labels.push(
+                        new Date(item.date).toLocaleDateString('ko-KR', {
+                            month: 'numeric',
+                            day: 'numeric',
+                        })
+                    );
+
+                    this.chart2.data.datasets.forEach((el) => {
+                        if (item.userInfor) {
+                            const target = Object.keys(item.userInfor).find((key) => key === el.id);
+                            if (target) {
+                                el.data.push(item.userInfor[target]);
+                            } else {
+                                el.data.push(null);
+                            }
+                        } else {
+                            el.data.push(null);
+                        }
+                    });
+                });
+
+            this.chart2.update();
         }
     }
 

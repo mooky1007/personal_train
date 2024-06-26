@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🔥 일일 운동 기록부</title>
-  <link rel="manifest" href="./manifest.json?update=2406262051">
+  <link rel="manifest" href="./manifest.json?update=2406262116">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="./css/style.css?update=2406262051">
-  <script src="./js/main.js?update=2406262051"></script>
+  <link rel="stylesheet" href="./css/style.css?update=2406262116">
+  <script src="./js/main.js?update=2406262116"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -59,6 +59,10 @@
         <div class="swiper-slide">
           <canvas id="myChart" height="180"></canvas>
         </div>
+
+        <div class="swiper-slide">
+          <canvas id="myChart2" height="180"></canvas>
+        </div>
       </div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
@@ -81,6 +85,7 @@
 
   <script>
     const ctx = document.getElementById('myChart');
+    const ctx2 = document.getElementById('myChart2');
 
     const chart = new Chart(ctx, {
       type: 'line',
@@ -135,8 +140,62 @@
       }
     });
 
+    const chart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: []
+      },
+      options: {
+        animation: {
+          duration: 0
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              stepSize: 1,
+              color: '#ddd',
+              font: {
+                size: 8,
+              },
+            }
+          },
+          y: {
+            beginAtZero: true,
+            suggestedMax: 80,
+            ticks: {
+              stepSize: 5,
+              color: '#ddd',
+              font: {
+                size: 8,
+              },
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              color: '#ddd',
+              boxWidth: 8,
+              boxHeight: 8,
+              padding: 20,
+              color: '#ddd',
+              font: {
+                size: 10,
+              }
+            }
+          }
+        }
+      }
+    });
+
     const app = new PersonalTrainApp();
     app.chart = chart;
+    app.chart2 = chart2;
 
     app.renderChart();
 
