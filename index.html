@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calisthenics</title>
-  <link rel="manifest" href="./manifest.json?update=2406261549">
+  <link rel="manifest" href="./manifest.json?update=2406261649">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
-  <link rel="stylesheet" href="./css/style.css?update=2406261549">
-  <script src="./js/main.js?update=2406261549"></script>
+  <link rel="stylesheet" href="./css/style.css?update=2406261649">
+  <script src="./js/main.js?update=2406261649"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -21,6 +22,9 @@
         <span></span>
       </span>
     </header>
+    <section style="padding: 10px 20px;">
+      <canvas id="myChart" height="150"></canvas>
+    </section>
     <section class="overview">
       <div class="continuityDay">
         <strong id="username"></strong>님,<br>
@@ -63,8 +67,46 @@
       </span>
     </div>
   </div>
+
   <script>
+    const ctx = document.getElementById('myChart');
+
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          data: [],
+          barThickness: 10,
+          backgroundColor: '#51f3a1',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        animation: {
+          duration: 0
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 50,
+            ticks: {
+              stepSize: 5
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
     const app = new PersonalTrainApp();
+    app.chart = chart;
+
+    app.renderChart();
   </script>
 </body>
 

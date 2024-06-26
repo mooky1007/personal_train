@@ -102,7 +102,9 @@ class PersonalTrainApp {
     }
 
     save() {
-        window.localStorage.setItem('train', JSON.stringify(this));
+        const cloneApp = {...this};
+        delete cloneApp.chart;
+        window.localStorage.setItem('train', JSON.stringify(cloneApp));
     }
 
     userInforSave() {
@@ -299,7 +301,25 @@ class PersonalTrainApp {
             });
         }
 
+        this.renderChart();
+
         this.createTrainList(this.data);
+    }
+
+    renderChart(){
+      if(this.chart){
+        this.chart.data.labels = this.#defaultTrain.map(el => el.name)
+        this.chart.data.datasets[0].data = this.#defaultTrain.map(el => 0)
+        
+        Object.values(this.data).map(el => {
+          const data = Object.values(el.trainList);
+          data.forEach(item => {
+            const idx = this.chart.data.labels.indexOf(item.name);
+            this.chart.data.datasets[0].data[idx] += item.count
+          })
+        })
+        this.chart.update();
+      }
     }
 
     addValue = (value, train) => {
