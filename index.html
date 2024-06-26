@@ -89,58 +89,60 @@
     const ctx = document.getElementById('myChart');
     const ctx2 = document.getElementById('myChart2');
 
+    const options = {
+      animation: {
+        duration: 0
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: 10,
+          ticks: {
+            stepSize: 1,
+            color: '#ddd',
+            font: {
+              size: 8,
+            },
+          }
+        },
+        y: {
+          beginAtZero: true,
+          suggestedMax: 50,
+          ticks: {
+            stepSize: 5,
+            color: '#ddd',
+            font: {
+              size: 8,
+            },
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          maxHeight: 30,
+          labels: {
+            color: '#ddd',
+            boxWidth: 8,
+            boxHeight: 8,
+            padding: 20,
+            color: '#ddd',
+            font: {
+              size: 10,
+            }
+          }
+        }
+      }
+    }
+
     const chart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: [],
         datasets: []
       },
-      options: {
-        animation: {
-          duration: 0
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-            max: 10,
-            ticks: {
-              stepSize: 1,
-              color: '#ddd',
-              font: {
-                size: 8,
-              },
-            }
-          },
-          y: {
-            beginAtZero: true,
-            suggestedMax: 50,
-            ticks: {
-              stepSize: 5,
-              color: '#ddd',
-              font: {
-                size: 8,
-              },
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: 'bottom',
-            maxHeight: 30,
-            labels: {
-              color: '#ddd',
-              boxWidth: 8,
-              boxHeight: 8,
-              padding: 20,
-              color: '#ddd',
-              font: {
-                size: 10,
-              }
-            }
-          }
-        }
-      }
+      options: options
     });
 
     const chart2 = new Chart(ctx2, {
@@ -149,52 +151,7 @@
         labels: [],
         datasets: []
       },
-      options: {
-        animation: {
-          duration: 0
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-            max: 10,
-            ticks: {
-              stepSize: 1,
-              color: '#ddd',
-              font: {
-                size: 8,
-              },
-            }
-          },
-          y: {
-            beginAtZero: true,
-            suggestedMax: 80,
-            ticks: {
-              stepSize: 5,
-              color: '#ddd',
-              font: {
-                size: 8,
-              },
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: 'bottom',
-            maxHeight: 30,
-            labels: {
-              color: '#ddd',
-              boxWidth: 8,
-              boxHeight: 8,
-              padding: 20,
-              color: '#ddd',
-              font: {
-                size: 10,
-              }
-            }
-          }
-        }
-      }
+      options: options
     });
 
     const app = new PersonalTrainApp();
