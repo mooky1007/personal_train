@@ -4,6 +4,14 @@ class PersonalTrainApp {
         this.data = {};
         this.point = 0;
 
+        this.userInfor = {
+            age: 0,
+            weight: 0,
+            height: 0,
+            bodyFat: 0,
+            muscle: 0,
+        };
+
         this.train = [
             {
                 id: 'pushup',
@@ -40,14 +48,19 @@ class PersonalTrainApp {
         //     window.location.reload();
         // });
 
-        document.querySelector('.drop_row').addEventListener('click', e => {
+        document.querySelector('.drop_row').addEventListener('click', (e) => {
             document.querySelector('.float_pannel').classList.remove('on');
         });
 
-        document.querySelector('.up_btn').addEventListener('click', e => {
+        document.querySelector('.up_btn').addEventListener('click', (e) => {
             document.querySelector('.float_pannel').classList.toggle('on');
+            this.render();
         });
-        
+
+        document.querySelector('.my_data').addEventListener('click', (e) => {
+            document.querySelector('.float_pannel').classList.toggle('on');
+            this.renderInfor();
+        });
     }
 
     get today() {
@@ -74,9 +87,7 @@ class PersonalTrainApp {
 
     init() {
         this.getTrainData();
-
         this.createTodayTrain();
-        this.render();
     }
 
     getTrainData() {
@@ -86,6 +97,13 @@ class PersonalTrainApp {
             this.createTrainList(data.data);
             this.train = data.train;
             this.userName = data.userName;
+            this.userInfor = data.userInfor || {
+                age: 0,
+                weight: 0,
+                height: 0,
+                bodyFat: 0,
+                muscle: 0,
+            };
             this.point = data.point;
         }
 
@@ -106,6 +124,12 @@ class PersonalTrainApp {
     }
 
     save() {
+        this.data[this.today].userInfor = this.userInfor;
+
+        weight.innerHTML = this.userInfor.weight;
+        muscle.innerHTML = this.userInfor.muscle;
+        bodyFat.innerHTML = this.userInfor.bodyFat;
+
         window.localStorage.setItem('train', JSON.stringify(this));
     }
 
@@ -131,7 +155,81 @@ class PersonalTrainApp {
         });
     }
 
+    renderInfor() {
+        document.querySelectorAll('.float_pannel .row').forEach((el) => el.remove());
+
+        const ageBlock = document.createElement('div');
+        ageBlock.classList.add('row');
+        ageBlock.innerHTML = `
+            <span class="title">나이</span>
+            <input type="number" value=${this.userInfor.age || 0}>
+            <button>저장</button>
+        `;
+        ageBlock.querySelector('button').addEventListener('click', () => {
+          this.userInfor.age = +ageBlock.querySelector('input').value;
+          this.save();
+        });
+
+        const heightBlock = document.createElement('div');
+        heightBlock.classList.add('row');
+        heightBlock.innerHTML = `
+            <span class="title">신장(cm)</span>
+            <input type="number" value=${this.userInfor.height || 0}>
+            <button>저장</button>
+        `;
+        heightBlock.querySelector('button').addEventListener('click', () => {
+          this.userInfor.height = +heightBlock.querySelector('input').value;
+          this.save();
+        });
+
+        const weightBlock = document.createElement('div');
+        weightBlock.classList.add('row');
+        weightBlock.innerHTML = `
+            <span class="title">체중(kg)</span>
+            <input type="number" value=${this.userInfor.weight || 0}>
+            <button>저장</button>
+        `;
+        weightBlock.querySelector('button').addEventListener('click', () => {
+          this.userInfor.weight = +weightBlock.querySelector('input').value;
+          this.save();
+        });
+
+        const bodyfatBlock = document.createElement('div');
+        bodyfatBlock.classList.add('row');
+        bodyfatBlock.innerHTML = `
+            <span class="title">체지방(%)</span>
+            <input type="number" value=${this.userInfor.bodyFat || 0}>
+            <button>저장</button>
+        `;
+        bodyfatBlock.querySelector('button').addEventListener('click', () => {
+          this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
+          this.save();
+        });
+
+        const muscleBlock = document.createElement('div');
+        muscleBlock.classList.add('row');
+        muscleBlock.innerHTML = `
+            <span class="title">골격근량(kg)</span>
+            <input type="number" value=${this.userInfor.muscle || 0}>
+            <button>저장</button>
+        `;
+        muscleBlock.querySelector('button').addEventListener('click', () => {
+          this.userInfor.muscle = +muscleBlock.querySelector('input').value;
+          this.save();
+        });
+
+        document.querySelector('.float_pannel').append(
+          ageBlock,
+          heightBlock,
+          weightBlock,
+          bodyfatBlock,
+          muscleBlock
+        );
+    }
+
     render() {
+        document.querySelectorAll('.float_pannel .row').forEach((el) => el.remove());
+
         this.train.forEach((train) => {
             const div = document.createElement('div');
 
@@ -150,7 +248,7 @@ class PersonalTrainApp {
                 button.innerHTML = `+${el}`;
                 button.addEventListener('click', () => {
                     this.addValue(el, train);
-                    document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
+                    document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`;
                 });
 
                 div.append(button);
@@ -162,12 +260,12 @@ class PersonalTrainApp {
             button.innerHTML = `초기화`;
             button.addEventListener('click', () => {
                 this.addValue(0, train);
-                document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
+                document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`;
             });
 
             div.append(button);
 
-            document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`
+            document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`;
             document.querySelector('.float_pannel').append(div);
         });
 

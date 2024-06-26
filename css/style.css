@@ -115,7 +115,7 @@ section {
     margin-left: auto;
 }
 
-.all_reset {
+.my_data {
     border: none;
     width: 100%;
     padding: 10px 0;
@@ -144,6 +144,7 @@ section {
     position: fixed;
     bottom: -100%;
     width: 100%;
+    max-width: 480px;
     min-height: 240px;
 
     padding: 5%;
@@ -214,4 +215,16 @@ section {
     width: 100%;
     gap: 15px;
     font-size: 13px;
+}
+
+.float_pannel input[type='number'] {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background: transparent;
+  padding: 5px;
+  color: #fff;
+}
+
+.float_pannel input[type='number']:focus {
+  outline: none;
 }
