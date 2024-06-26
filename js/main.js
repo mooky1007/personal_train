@@ -1,5 +1,5 @@
 class PersonalTrainApp {
-    #todayOffset = 0;
+    #todayOffset = 1;
     constructor() {
         this.userName = '';
         this.data = {};
@@ -200,7 +200,7 @@ class PersonalTrainApp {
         const muscleBlock = document.createElement('div');
         muscleBlock.classList.add('row');
         muscleBlock.innerHTML = `
-            <span class="title">골격근량(kg)</span>
+            <span class="title">골격근(kg)</span>
             <input type="number" value=${this.userInfor.muscle || 0}>
         `;
 
@@ -224,9 +224,12 @@ class PersonalTrainApp {
             this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
             this.userInfor.muscle = +muscleBlock.querySelector('input').value;
 
+
             this.userInforSave();
             this.render();
             this.save();
+
+            document.querySelector('.float_pannel').classList.remove('on');
         });
 
         document.querySelector('.float_pannel').append(weightBlock, bodyfatBlock, muscleBlock, saveButton);
@@ -280,8 +283,8 @@ class PersonalTrainApp {
             weight.innerHTML = `${this.userInfor.weight} kg
             <span class="sub_span">${
                 diff > 0
-                    ? `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▲</i> ${parseFloat(diff.toFixed(2))} kg`
-                    : `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
+                    ? `<i style="color: #ff5252;" >▲</i> ${parseFloat(diff.toFixed(2))} kg`
+                    : `<i style="color: #51f375" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
             }</span>`;
         } else {
             if (this.userInfor.weight) weight.innerHTML = parseFloat(this.userInfor.weight.toFixed(2)) + ' kg';
@@ -292,8 +295,8 @@ class PersonalTrainApp {
             muscle.innerHTML = `${this.userInfor.muscle} kg
             <span class="sub_span">${
                 diff > 0
-                    ? `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▲</i> ${parseFloat(diff.toFixed(2))} kg`
-                    : `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
+                    ? `<i style="color: #51f375;" >▲</i> ${parseFloat(diff.toFixed(2))} kg`
+                    : `<i style="color: #ff5252" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
             }</span>`;
         } else {
             if (this.userInfor.muscle) muscle.innerHTML = parseFloat(this.userInfor.muscle.toFixed(2)) + ' kg';
@@ -304,8 +307,8 @@ class PersonalTrainApp {
             bodyFat.innerHTML = `${this.userInfor.bodyFat} %
             <span class="sub_span">${
                 diff > 0
-                    ? `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▲</i> ${parseFloat(diff.toFixed(2))} %`
-                    : `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} %`
+                    ? `<i style="color: #ff5252;" >▲</i> ${parseFloat(diff.toFixed(2))} %`
+                    : `<i style="color: #51f375" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} %`
             }</span>`;
         } else {
             if (this.userInfor.bodyFat) bodyFat.innerHTML = parseFloat(this.userInfor.bodyFat.toFixed(2)) + ' %';
@@ -424,17 +427,17 @@ class PersonalTrainDay {
             if (this.userInfor) {
                 const block = document.createElement('div');
                 block.innerHTML = `
-                  <div class="row" style="margin-top: 20px; gap: 15px;">
+                  <div class="row" style="margin-top: 20px; gap: 15px; font-size: 10px;">
                     <p>
-                        <span>체중</span>
+                        <span>체중 :</span>
                         <span>${this.userInfor.weight}</span>kg
                     </p>
                     <p>
-                        <span>골격근량</span>
+                        <span>골격근 :</span>
                         <span>${this.userInfor.muscle}</span>kg
                     </p>
                     <p>
-                        <span>체지방</span>
+                        <span>체지방 :</span>
                         <span>${this.userInfor.bodyFat}</span>%
                     </p>
                 </div>

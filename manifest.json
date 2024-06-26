@@ -3,7 +3,7 @@
   "dir": "ltr",
   "display": "standalone",
   "name": "Calisthenics",
-  "orientation": "any",
+  "orientation": "portrait",
   "scope": "/",
   "short_name": "Calisthenics",
   "start_url": "/personal_train",
