@@ -1,15 +1,15 @@
 @font-face {
-    font-family: 'Ownglyph_ryuttung-Rg';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_ryuttung-Rg.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Ownglyph_ryuttung-Rg';
+    font-family: 'NEXON Lv1 Gothic OTF';
 }
 
 body {
@@ -40,16 +40,25 @@ main {
     flex-direction: column;
 }
 
+.continuityDay {
+  position: relative;
+  line-height: 1.3;
+}
+
+.overview > div {
+  padding: 10px 0;
+}
+
+.overview > div + div {
+  border-top: 1px solid #888;
+}
+
 .point {
     position: absolute;
     top: 10px;
     right: 10px;
     color: #fff;
     font-size: 12px;
-}
-
-.overview .continuityDay {
-    margin-bottom: 20px;
 }
 
 .train_date_block {
@@ -107,8 +116,7 @@ section {
 }
 
 .data_list li .row .train_name {
-    width: 20%;
-    margin-bottom: 5px;
+    width: 25%;
 }
 
 .data_list li .row .train_goal {
@@ -130,13 +138,14 @@ section {
     background: #555;
     position: relative;
     overflow: hidden;
+    margin-top: 8px;
 }
 
 .gage_inner {
     position: absolute;
     top: 0;
     width: 0;
-    background: #51f375;
+    background: #51f3a1;
     height: 100%;
 }
 
@@ -168,7 +177,7 @@ section {
 }
 
 .float_pannel .row .title {
-    width: 20%;
+    width: 30%;
 }
 
 .float_pannel .row button {
@@ -260,4 +269,23 @@ section {
 i {
   font-style: normal;
   font-size: 8px !important;
+}
+
+.today_goal p {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.today_goal li {
+  list-style: none;
+  font-size: 11px;
+}
+
+.today_goal li + li {
+  margin-top: 5px;
+}
+
+.today_goal li::before {
+  content: '- ';
+  font-size: 8px;
 }

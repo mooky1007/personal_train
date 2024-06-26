@@ -152,13 +152,13 @@ class PersonalTrainApp {
     }
 
     createTrainList(data = {}) {
-        document.querySelector('main ul').innerHTML = '';
+        document.querySelector('main .data_list').innerHTML = '';
         const dataArr = Object.values(data).sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
         });
 
         dataArr.forEach((trainItem) => {
-            if((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
+            if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
             // console.log(this.data[trainItem.id]);
             // console.log(this.data[trainItem.id].trainList);
             // console.log(this.data[trainItem.id].userInfor);
@@ -311,6 +311,31 @@ class PersonalTrainApp {
             if (this.userInfor.bodyFat) bodyFat.innerHTML = parseFloat(this.userInfor.bodyFat.toFixed(2)) + ' %';
         }
 
+        document.querySelector('.today_goal ul').innerHTML = '';
+
+        const result = this.train.every(
+            (trainItem) =>
+                (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
+                (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount)
+        );
+
+        if (result) {
+            document.querySelector('.today_goal ul').innerHTML = `<li>오늘의 운동을 완료했습니다!</li>`;
+        } else {
+            this.train.forEach((trainItem) => {
+                const li = document.createElement('li');
+                const goalCheck =
+                    (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
+                    (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount);
+                if (goalCheck) return;
+
+                li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.id]?.count || 0}/${
+                    this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount
+                }회`;
+                document.querySelector('.today_goal ul').append(li);
+            });
+        }
+
         this.createTrainList(this.data);
     }
 
@@ -343,6 +368,7 @@ class PersonalTrainApp {
             train.defaultCount = this.data[this.today].trainList[train.id].count;
         }
         this.data[this.today].render();
+        this.render();
         this.save();
     };
 }
@@ -381,13 +407,11 @@ class PersonalTrainDay {
                 Object.keys(this.trainList).forEach((key) => {
                     const block = document.createElement('div');
                     block.classList.add('row');
-                    if (this.trainList[key].count > this.trainList[key].defaultCount) block.style.cssText = `color: yellow;`;
-                    if (this.trainList[key].count === this.trainList[key].defaultCount) block.style.cssText = `color: #51f375;`;
-
                     block.innerHTML = `
                       <span class="train_name">[${this.trainList[key].name}]</span>
-                      <span class="train_count">${this.trainList[key].count}개</span>
-                      <span class="train_goal">${this.trainList[key].defaultCount}개</span>
+                      <span class="train_goal"><span
+                        style="${this.trainList[key].count > this.trainList[key].defaultCount ? 'color: yellow' : ''}"
+                      >${this.trainList[key].count}</span>/${this.trainList[key].defaultCount}회</span>
                       <span class="gage">
                           <span class="gage_inner" style="width: ${(this.trainList[key].count / this.trainList[key].defaultCount) * 100}%"></span>
                       </span>
@@ -423,7 +447,7 @@ class PersonalTrainDay {
             li.classList.add('train_date_block');
             this.el = li;
 
-            document.querySelector('main ul').append(li);
+            document.querySelector('main .data_list').append(li);
             this.render();
         }
     }
