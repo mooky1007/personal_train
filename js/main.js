@@ -1,5 +1,5 @@
 class PersonalTrainApp {
-    #todayOffset = 4;
+    #todayOffset = 0;
     #defaultTrain = [
         { id: 'pushup', name: '푸쉬업', defaultCount: 15 },
         { id: 'pullup', name: '풀업', defaultCount: 5 },
@@ -41,6 +41,20 @@ class PersonalTrainApp {
         return continuityDay;
     }
 
+    controlBottomFloat(type) {
+        document.querySelector('.float_pannel').classList.toggle('on');
+        switch (type) {
+            case 'train':
+                this.renderTrain();
+                break;
+            case 'infor':
+                this.renderInfor();
+                break;
+            default:
+                break;
+        }
+    }
+
     get prevUserInfor() {
         const dataArr = Object.values(this.data).sort((a, b) => new Date(b.date) - new Date(a.date));
         const userInforArr = dataArr.filter((el) => el.userInfor);
@@ -56,17 +70,15 @@ class PersonalTrainApp {
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
 
         document.querySelector('.drop_row').addEventListener('click', (e) => {
-            document.querySelector('.float_pannel').classList.remove('on');
+            this.controlBottomFloat();
         });
 
-        document.querySelector('.up_btn').addEventListener('click', (e) => {
-            document.querySelector('.float_pannel').classList.toggle('on');
-            this.renderTrain();
+        document.querySelector('.up_btn').addEventListener('click', () => {
+            this.controlBottomFloat('train');
         });
 
-        document.querySelector('.my_data').addEventListener('click', (e) => {
-            document.querySelector('.float_pannel').classList.toggle('on');
-            this.renderInfor();
+        document.querySelector('.my_data').addEventListener('click', () => {
+            this.controlBottomFloat('infor');
         });
     }
 
@@ -114,9 +126,7 @@ class PersonalTrainApp {
 
     createTodayTrain() {
         if (this.data[this.today]) return;
-
         this.data[this.today] = new PersonalTrainDay({ id: this.today });
-
         this.save();
     }
 
@@ -129,6 +139,13 @@ class PersonalTrainApp {
         dataArr.forEach((trainItem) => {
             if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
+
+            this.data[trainItem.id].el.addEventListener('click', () => {
+                console.log(this.data[trainItem.id]);
+                delete this.data[trainItem.id];
+
+                this.render();
+            });
         });
     }
 
@@ -186,15 +203,15 @@ class PersonalTrainApp {
         saveButton.querySelector('button').addEventListener('click', () => {
             // this.userInfor.age = +ageBlock.querySelector('input').value;
             // this.userInfor.height = +heightBlock.querySelector('input').value;
-            this.userInfor.weight = +weightBlock.querySelector('input').value;
-            this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
-            this.userInfor.muscle = +muscleBlock.querySelector('input').value;
+            if (+weightBlock.querySelector('input').value !== 0) this.userInfor.weight = +weightBlock.querySelector('input').value;
+            if (+bodyfatBlock.querySelector('input').value !== 0) this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
+            if (+muscleBlock.querySelector('input').value !== 0) this.userInfor.muscle = +muscleBlock.querySelector('input').value;
 
             this.userInforSave();
             this.render();
             this.save();
 
-            document.querySelector('.float_pannel').classList.remove('on');
+            this.controlBottomFloat();
         });
 
         document.querySelector('.float_pannel').append(weightBlock, bodyfatBlock, muscleBlock, saveButton);
@@ -231,6 +248,7 @@ class PersonalTrainApp {
             button.innerHTML = `초기화`;
             button.addEventListener('click', () => {
                 this.addValue(0, train);
+                this.renderChart();
             });
 
             div.append(button);
