@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calisthenics</title>
-  <link rel="manifest" href="./manifest.json?update=2406261736">
+  <link rel="manifest" href="./manifest.json?update=2406261803">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
-  <link rel="stylesheet" href="./css/style.css?update=2406261736">
-  <script src="./js/main.js?update=2406261736"></script>
+  <link rel="stylesheet" href="./css/style.css?update=2406261803">
+  <script src="./js/main.js?update=2406261803"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -84,23 +84,41 @@
         scales: {
           x: {
             beginAtZero: true,
-            max: 5,
+            max: 10,
             ticks: {
-              stepSize: 1
+              stepSize: 1,
+              color: '#ddd',
+              font: {
+                size: 8,
+              },
             }
           },
           y: {
             beginAtZero: true,
             suggestedMax: 50,
             ticks: {
-              stepSize: 5
+              stepSize: 5,
+              color: '#ddd',
+              font: {
+                size: 8,
+              },
             }
           }
         },
         plugins: {
           legend: {
-            display: false,
-            position: 'bottom'
+            display: true,
+            position: 'bottom',
+            labels: {
+              color: '#ddd',
+              boxWidth: 8,
+              boxHeight: 8,
+              padding: 20,
+              color: '#ddd',
+              font: {
+                size: 10,
+              }
+            }
           }
         }
       }
