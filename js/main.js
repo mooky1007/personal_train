@@ -52,7 +52,7 @@ class PersonalTrainApp {
 
     get today() {
         let date = new Date();
-        date.setDate(date.getDate() - 7);
+        date.setDate(date.getDate());
         return `train_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     }
 
@@ -134,6 +134,7 @@ class PersonalTrainApp {
     render() {
         this.train.forEach((train) => {
             const div = document.createElement('div');
+
             div.classList.add('row');
             const p = document.createElement('p');
             p.classList.add('title');
