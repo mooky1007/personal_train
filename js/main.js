@@ -331,6 +331,7 @@ class PersonalTrainApp {
 
     renderChart() {
         const colors = ['#f35151', '#f3bf51', '#5188f3', '#8cf351', '#a851f3'];
+        const skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
         if (this.chart) {
             this.chart.data.labels = [];
@@ -345,6 +346,11 @@ class PersonalTrainApp {
                     borderWidth: 1.5,
                     tension: 0.3,
                     radius: 2.5,
+                    spanGaps: true,
+                    segment: {
+                        borderColor: (ctx) => skipped(ctx, 'rgb(255,255,255,0.1)') || colors[idx],
+                        borderDash: (ctx) => skipped(ctx, [5, 5]),
+                    },
                 };
             });
 
@@ -363,7 +369,7 @@ class PersonalTrainApp {
                         if (target) {
                             el.data.push(target.count);
                         } else {
-                            el.data.push(0);
+                            el.data.push(null);
                         }
                     });
                 });

@@ -308,6 +308,10 @@ i {
     gap: 20px;
 }
 
+.today_goal ul {
+  min-height: 100px;
+}
+
 .today_goal > * {
     width: 100%;
 }

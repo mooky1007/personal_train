@@ -2,10 +2,10 @@
   "background_color": "#333333",
   "dir": "ltr",
   "display": "standalone",
-  "name": "Calisthenics",
+  "name": "🔥일일 운동 기록부",
   "orientation": "portrait-primary",
   "scope": "/",
-  "short_name": "Calisthenics",
+  "short_name": "🔥일일 운동 기록부",
   "start_url": "/personal_train",
   "theme_color": "#333333",
   "icons": [
