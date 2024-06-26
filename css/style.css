@@ -67,7 +67,7 @@ main {
 }
 
 section {
-    padding: 5%;
+    padding: 20px;
 }
 
 .list_section {
@@ -156,7 +156,7 @@ section {
     max-width: 480px;
     min-height: 240px;
 
-    padding: 5%;
+    padding: 20px;
     color: #fff;
     background: #222;
     border-radius: 20px 20px 0 0;
@@ -290,4 +290,31 @@ i {
 .today_goal li::before {
   content: '- ';
   font-size: 8px;
+}
+
+header {
+  padding: 0 20px;
+  width: 100%;
+  height: 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+}
+
+header span:last-child {
+  width: 24px;
+  height: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+header span:last-child span {
+  width: 100%;
+  height: 2px;
+  background: #fff;
 }

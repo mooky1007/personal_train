@@ -2,63 +2,71 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calisthenics</title>
-    <link rel="manifest" href="./manifest.json?update=2406261536">
-    <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
-    <link rel="stylesheet" href="./css/style.css?update=2406261536">
-    <script src="./js/main.js?update=2406261536"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calisthenics</title>
+  <link rel="manifest" href="./manifest.json?update=2406261542">
+  <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
+  <link rel="stylesheet" href="./css/style.css?update=2406261542">
+  <script src="./js/main.js?update=2406261542"></script>
 </head>
 
 <body>
-    <main>
-        <section class="overview">
-          <div class="continuityDay">
-                <span class="point">0 Point</span>
-                <strong id="username"></strong>님,<br>
-                <strong id="continuityCount">0</strong>일 연속 도전중!
-            </div>
+  <main>
+    <header>
+      <span>🔥 일일 운동 기록부</span>
+      <span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </header>
+    <section class="overview">
+      <div class="continuityDay">
+        <span class="point">0 Point</span>
+        <strong id="username"></strong>님,<br>
+        <strong id="continuityCount">0</strong>일 연속 도전중!
+      </div>
 
-            <div class="today_goal">
-              <p>오늘 해야할 운동</p>
-              <ul>
-              </ul>
-            </div>
-            
-            <div class="infor">
-                <p>
-                    <span>체중 :</span>
-                    <span id="weight">-</span>
-                </p>
-                <p>
-                    <span>골격근 :</span>
-                    <span id="muscle">-</span>
-                </p>
-                <p>
-                    <span>체지방 :</span>
-                    <span id="bodyFat">-</span>
-                </p>
-            </div>
-        </section>
-        <section class="list_section">
-            <ul class="data_list">
-            </ul>
-            <div class="row">
-                <button class="up_btn">오늘 운동 기록 추가하기</button>
-                <button class="my_data">오늘 체중/체성분 입력하기</button>
-            </div>
-        </section>
-    </main>
-    <div class="float_pannel">
-        <div class="drop_row">
-            <span class="down_btn">
-            </span>
-        </div>
+      <div class="today_goal">
+        <p>오늘 해야할 운동</p>
+        <ul>
+        </ul>
+      </div>
+
+      <div class="infor">
+        <p>
+          <span>체중 :</span>
+          <span id="weight">-</span>
+        </p>
+        <p>
+          <span>골격근 :</span>
+          <span id="muscle">-</span>
+        </p>
+        <p>
+          <span>체지방 :</span>
+          <span id="bodyFat">-</span>
+        </p>
+      </div>
+    </section>
+    <section class="list_section">
+      <ul class="data_list">
+      </ul>
+      <div class="row">
+        <button class="up_btn">오늘 운동 기록 추가하기</button>
+        <button class="my_data">오늘 체중/체성분 입력하기</button>
+      </div>
+    </section>
+  </main>
+  <div class="float_pannel">
+    <div class="drop_row">
+      <span class="down_btn">
+      </span>
     </div>
-    <script>
-        const app = new PersonalTrainApp();
-    </script>
+  </div>
+  <script>
+    const app = new PersonalTrainApp();
+  </script>
 </body>
 
 </html>
