@@ -2,11 +2,11 @@
   "background_color": "#333333",
   "dir": "ltr",
   "display": "standalone",
-  "name": "mooky1007.github",
+  "name": "Calisthenics",
   "orientation": "any",
   "scope": "/",
-  "short_name": "mooky1007.github",
-  "start_url": "/",
+  "short_name": "Calisthenics",
+  "start_url": "/personal_train",
   "theme_color": "#333333",
   "icons": [
     {
