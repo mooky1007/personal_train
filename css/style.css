@@ -152,6 +152,9 @@ section {
     background: #222;
     border-radius: 20px 20px 0 0;
     transition: bottom 0.3s ease-in-out;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .float_pannel.on {
@@ -212,9 +215,29 @@ section {
 
 .infor {
     display: flex;
+    justify-content: space-between;
     width: 100%;
-    gap: 15px;
     font-size: 13px;
+}
+
+.infor p {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.infor p span {
+  position: relative;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  width: 50%;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.infor p span:first-child {
+  width: auto;
 }
 
 .float_pannel input[type='number'] {
@@ -227,4 +250,14 @@ section {
 
 .float_pannel input[type='number']:focus {
   outline: none;
+}
+
+.sub_span {
+  font-size: 11px;
+  color: #ddd;
+}
+
+i {
+  font-style: normal;
+  font-size: 8px !important;
 }

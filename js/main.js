@@ -1,15 +1,16 @@
 class PersonalTrainApp {
+    #todayOffset = 0;
     constructor() {
         this.userName = '';
         this.data = {};
         this.point = 0;
 
         this.userInfor = {
-            age: 0,
-            weight: 0,
-            height: 0,
-            bodyFat: 0,
-            muscle: 0,
+            age: null,
+            weight: null,
+            height: null,
+            bodyFat: null,
+            userInformuscle: null,
         };
 
         this.train = [
@@ -43,10 +44,6 @@ class PersonalTrainApp {
         this.init();
 
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
-        // document.querySelector('.all_reset').addEventListener('click', () => {
-        //     window.localStorage.removeItem('train');
-        //     window.location.reload();
-        // });
 
         document.querySelector('.drop_row').addEventListener('click', (e) => {
             document.querySelector('.float_pannel').classList.remove('on');
@@ -54,7 +51,7 @@ class PersonalTrainApp {
 
         document.querySelector('.up_btn').addEventListener('click', (e) => {
             document.querySelector('.float_pannel').classList.toggle('on');
-            this.render();
+            this.renderTrain();
         });
 
         document.querySelector('.my_data').addEventListener('click', (e) => {
@@ -65,7 +62,7 @@ class PersonalTrainApp {
 
     get today() {
         let date = new Date();
-        date.setDate(date.getDate());
+        date.setDate(date.getDate() + this.#todayOffset);
         return `train_${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     }
 
@@ -85,9 +82,19 @@ class PersonalTrainApp {
         return result;
     }
 
+    get prevUserInfor() {
+        const dataArr = Object.values(this.data).sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+        });
+        const userInforArr = dataArr.filter((el) => el.userInfor);
+        return userInforArr[1]?.userInfor || null;
+    }
+
     init() {
         this.getTrainData();
         this.createTodayTrain();
+
+        this.render();
     }
 
     getTrainData() {
@@ -98,11 +105,11 @@ class PersonalTrainApp {
             this.train = data.train;
             this.userName = data.userName;
             this.userInfor = data.userInfor || {
-                age: 0,
-                weight: 0,
-                height: 0,
-                bodyFat: 0,
-                muscle: 0,
+                age: null,
+                weight: null,
+                height: null,
+                bodyFat: null,
+                muscle: null,
             };
             this.point = data.point;
         }
@@ -124,13 +131,12 @@ class PersonalTrainApp {
     }
 
     save() {
-        this.data[this.today].userInfor = this.userInfor;
-
-        weight.innerHTML = this.userInfor.weight;
-        muscle.innerHTML = this.userInfor.muscle;
-        bodyFat.innerHTML = this.userInfor.bodyFat;
-
         window.localStorage.setItem('train', JSON.stringify(this));
+    }
+
+    userInforSave() {
+        this.data[this.today].userInfor = this.userInfor;
+        this.data[this.today].render();
     }
 
     createTodayTrain() {
@@ -158,78 +164,71 @@ class PersonalTrainApp {
     renderInfor() {
         document.querySelectorAll('.float_pannel .row').forEach((el) => el.remove());
 
-        const ageBlock = document.createElement('div');
-        ageBlock.classList.add('row');
-        ageBlock.innerHTML = `
-            <span class="title">나이</span>
-            <input type="number" value=${this.userInfor.age || 0}>
-            <button>저장</button>
-        `;
-        ageBlock.querySelector('button').addEventListener('click', () => {
-          this.userInfor.age = +ageBlock.querySelector('input').value;
-          this.save();
-        });
+        // const ageBlock = document.createElement('div');
+        // ageBlock.classList.add('row');
+        // ageBlock.innerHTML = `
+        //     <span class="title">나이</span>
+        //     <input type="number" value=${this.userInfor.age || 0}>
+        // `;
 
-        const heightBlock = document.createElement('div');
-        heightBlock.classList.add('row');
-        heightBlock.innerHTML = `
-            <span class="title">신장(cm)</span>
-            <input type="number" value=${this.userInfor.height || 0}>
-            <button>저장</button>
-        `;
-        heightBlock.querySelector('button').addEventListener('click', () => {
-          this.userInfor.height = +heightBlock.querySelector('input').value;
-          this.save();
-        });
+        // const heightBlock = document.createElement('div');
+        // heightBlock.classList.add('row');
+        // heightBlock.innerHTML = `
+        //     <span class="title">신장(cm)</span>
+        //     <input type="number" value=${this.userInfor.height || 0}>
+        // `;
 
         const weightBlock = document.createElement('div');
         weightBlock.classList.add('row');
         weightBlock.innerHTML = `
             <span class="title">체중(kg)</span>
             <input type="number" value=${this.userInfor.weight || 0}>
-            <button>저장</button>
         `;
-        weightBlock.querySelector('button').addEventListener('click', () => {
-          this.userInfor.weight = +weightBlock.querySelector('input').value;
-          this.save();
-        });
 
         const bodyfatBlock = document.createElement('div');
         bodyfatBlock.classList.add('row');
         bodyfatBlock.innerHTML = `
             <span class="title">체지방(%)</span>
             <input type="number" value=${this.userInfor.bodyFat || 0}>
-            <button>저장</button>
         `;
-        bodyfatBlock.querySelector('button').addEventListener('click', () => {
-          this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
-          this.save();
-        });
 
         const muscleBlock = document.createElement('div');
         muscleBlock.classList.add('row');
         muscleBlock.innerHTML = `
             <span class="title">골격근량(kg)</span>
             <input type="number" value=${this.userInfor.muscle || 0}>
+        `;
+
+        const saveButton = document.createElement('div');
+        saveButton.classList.add('row');
+        saveButton.innerHTML = `
             <button>저장</button>
         `;
-        muscleBlock.querySelector('button').addEventListener('click', () => {
-          this.userInfor.muscle = +muscleBlock.querySelector('input').value;
-          this.save();
+        saveButton.style.cssText = `margin-top: auto;`
+
+        saveButton.querySelector('button').style.cssText = `
+          width: 100%;
+          background: #fff;
+          color: #333;
+        `
+
+        saveButton.querySelector('button').addEventListener('click', () => {
+            // this.userInfor.age = +ageBlock.querySelector('input').value;
+            // this.userInfor.height = +heightBlock.querySelector('input').value;
+            this.userInfor.weight = +weightBlock.querySelector('input').value;
+            this.userInfor.bodyFat = +bodyfatBlock.querySelector('input').value;
+            this.userInfor.muscle = +muscleBlock.querySelector('input').value;
+
+            this.userInforSave();
+            this.render();
+            this.save();
         });
 
-        document.querySelector('.float_pannel').append(
-          ageBlock,
-          heightBlock,
-          weightBlock,
-          bodyfatBlock,
-          muscleBlock
-        );
+        document.querySelector('.float_pannel').append(weightBlock, bodyfatBlock, muscleBlock, saveButton);
     }
 
-    render() {
+    renderTrain() {
         document.querySelectorAll('.float_pannel .row').forEach((el) => el.remove());
-
         this.train.forEach((train) => {
             const div = document.createElement('div');
 
@@ -268,6 +267,44 @@ class PersonalTrainApp {
             document.querySelector('.point').innerHTML = `${this.point.toLocaleString()} point`;
             document.querySelector('.float_pannel').append(div);
         });
+    }
+
+    render() {
+        if (this.prevUserInfor && +this.userInfor.weight !== +this.prevUserInfor.weight) {
+            const diff = +this.userInfor.weight - +this.prevUserInfor.weight;
+            weight.innerHTML = `${this.userInfor.weight} kg
+            <span class="sub_span">${
+                diff > 0
+                    ? `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▲</i> ${parseFloat(diff.toFixed(2))} kg`
+                    : `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
+            }</span>`;
+        } else {
+            if (this.userInfor.weight) weight.innerHTML = parseFloat(this.userInfor.weight.toFixed(2)) + ' kg';
+        }
+
+        if (this.prevUserInfor && +this.userInfor.muscle !== +this.prevUserInfor.muscle) {
+            const diff = +this.userInfor.muscle - +this.prevUserInfor.muscle;
+            muscle.innerHTML = `${this.userInfor.muscle} kg
+            <span class="sub_span">${
+                diff > 0
+                    ? `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▲</i> ${parseFloat(diff.toFixed(2))} kg`
+                    : `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} kg`
+            }</span>`;
+        } else {
+            if (this.userInfor.muscle) muscle.innerHTML = parseFloat(this.userInfor.muscle.toFixed(2)) + ' kg';
+        }
+
+        if (this.prevUserInfor && +this.userInfor.bodyFat !== +this.prevUserInfor.bodyFat) {
+            const diff = +this.userInfor.bodyFat - +this.prevUserInfor.bodyFat;
+            bodyFat.innerHTML = `${this.userInfor.bodyFat} %
+            <span class="sub_span">${
+                diff > 0
+                    ? `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▲</i> ${parseFloat(diff.toFixed(2))} %`
+                    : `<i style="${diff > 0 ? 'color: #ff5252' : 'color: #51f375;'}" >▼</i> ${parseFloat(Math.abs(diff).toFixed(2))} %`
+            }</span>`;
+        } else {
+            if (this.userInfor.bodyFat) bodyFat.innerHTML = parseFloat(this.userInfor.bodyFat.toFixed(2)) + ' %';
+        }
 
         this.createTrainList(this.data);
     }
@@ -310,6 +347,7 @@ class PersonalTrainDay {
         this.id = config.id;
         this.date = config.date || config.id.replace('train_', '');
         this.trainList = config.trainList;
+        this.userInfor = config.userInfor || null;
         this.el = null;
 
         this.dateOption = {
@@ -332,27 +370,48 @@ class PersonalTrainDay {
             if (Object.keys(this.trainList).length === 0) {
                 const block = document.createElement('div');
                 block.classList.add('row');
-                block.innerHTML = `<span class="no-data">오늘 운동기록이 없습니다.<span>`;
+                block.innerHTML = `<span class="no-data">운동기록이 없습니다.<span>`;
                 this.el.append(block);
+            } else {
+                Object.keys(this.trainList).forEach((key) => {
+                    const block = document.createElement('div');
+                    block.classList.add('row');
+                    if (this.trainList[key].count > this.trainList[key].defaultCount) block.style.cssText = `color: yellow;`;
+                    if (this.trainList[key].count === this.trainList[key].defaultCount) block.style.cssText = `color: #51f375;`;
+
+                    block.innerHTML = `
+                      <span class="train_name">[${this.trainList[key].name}]</span>
+                      <span class="train_count">${this.trainList[key].count}개</span>
+                      <span class="train_goal">${this.trainList[key].defaultCount}개</span>
+                      <span class="gage">
+                          <span class="gage_inner" style="width: ${(this.trainList[key].count / this.trainList[key].defaultCount) * 100}%"></span>
+                      </span>
+                  `;
+
+                    this.el.append(block);
+                });
             }
 
-            Object.keys(this.trainList).forEach((key) => {
+            if (this.userInfor) {
                 const block = document.createElement('div');
-                block.classList.add('row');
-                if (this.trainList[key].count > this.trainList[key].defaultCount) block.style.cssText = `color: yellow;`;
-                if (this.trainList[key].count === this.trainList[key].defaultCount) block.style.cssText = `color: #51f375;`;
-
                 block.innerHTML = `
-                    <span class="train_name">[${this.trainList[key].name}]</span>
-                    <span class="train_count">${this.trainList[key].count}개</span>
-                    <span class="train_goal">${this.trainList[key].defaultCount}개</span>
-                    <span class="gage">
-                        <span class="gage_inner" style="width: ${(this.trainList[key].count / this.trainList[key].defaultCount) * 100}%"></span>
-                    </span>
-                `;
-
+                  <div class="row" style="margin-top: 20px; gap: 15px;">
+                    <p>
+                        <span>체중</span>
+                        <span>${this.userInfor.weight}</span>kg
+                    </p>
+                    <p>
+                        <span>골격근량</span>
+                        <span>${this.userInfor.muscle}</span>kg
+                    </p>
+                    <p>
+                        <span>체지방</span>
+                        <span>${this.userInfor.bodyFat}</span>%
+                    </p>
+                </div>
+              `;
                 this.el.append(block);
-            });
+            }
         } else {
             const li = document.createElement('li');
             li.id = this.id;
