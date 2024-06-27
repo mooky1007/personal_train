@@ -23,7 +23,7 @@ body {
 main {
     background: #333;
     width: 100%;
-    height: 100svh;
+    height: 100vh;
     max-width: 480px;
 
     display: flex;

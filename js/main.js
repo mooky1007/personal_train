@@ -115,9 +115,6 @@ class PersonalTrainApp {
     }
 
     async init() {
-        this.getLocalData();
-        await this.createTodayTrain();
-
         this.userInfor = {
             age: null,
             weight: null,
@@ -125,6 +122,10 @@ class PersonalTrainApp {
             bodyFat: null,
             muscle: null,
         };
+        
+        this.getLocalData();
+        await this.createTodayTrain();
+
 
         this.render();
 
