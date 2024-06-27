@@ -17,6 +17,43 @@ class PersonalTrainApp {
         document.querySelectorAll('[data-js]').forEach((el) => {
             el.innerHTML = this[el.dataset.js];
         });
+
+        this.routine = {};
+
+        this.train.forEach((train) => {
+            this.routine[train.id] = new Routine({
+                startDate: new Date(),
+                trainName: train.name,
+                userMaxiumCount: train.defaultCount,
+            });
+        });
+
+        const maxLength = Math.max(...Object.values(this.routine).map(el => el.setData.set.length))
+
+        Object.values(this.routine).forEach((el) => {
+            const table = document.querySelector('table');
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+
+            thead.innerHTML = `
+              <tr>
+                ${new Array(maxLength + 1).fill().map((el, idx) => {
+                  return `<th>${idx === 0 ? '' : `Set${idx}`}</th>`
+                }).join('')}
+              </tr>
+            `
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td>${el.trainName}<br>휴식: ${el.setData.restTime}초</td>
+            ${new Array(maxLength).fill().map((_, idx) => {
+                    if (idx === el.setData.set.length - 1) return `<td>${el.setData.set[idx]} +</td>`;
+                    return `<td>${el.setData.set[idx] || '-'}</td>`;
+                })
+                .join('')}`;
+
+            tbody.append(tr);
+        });
     }
 
     dateFormat(date) {
@@ -106,6 +143,7 @@ class PersonalTrainApp {
             this.createTrainList(data.data);
             this.train = data.train;
             this.userName = data.userName;
+            this.routine = data.routine || {};
             this.sp = +data?.sp || 0;
             this.userInfor = data.userInfor || {
                 age: null,
