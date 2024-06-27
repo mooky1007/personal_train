@@ -193,12 +193,13 @@ class Routine {
         this.userMaxiumCount = config.userMaxiumCount || 0;
         this.week = config.week || 1;
         this.progress = config.progress || 0;
-
+        this.todayOffset = config.todayOffset;
         this.init();
     }
 
     get today() {
-        return new Date();
+        let date = new Date();
+        return date.setDate(date.getDate() + this.todayOffset);
     }
 
     get week() {
@@ -209,7 +210,12 @@ class Routine {
         if (value === this._week) return;
         this._week = value;
         if (this._week > 6) return (this._week = 6);
-        // console.log(`%c[${this.trainName}] ${value}주차(최대 ${this.userMaxiumCount}회)로 설정되었습니다!`, 'color: yellow');
+    }
+
+    get totalSet() {
+        return this.getSet()[this.progress].set.reduce((acc, cur) => {
+            return (acc += cur);
+        }, 0);
     }
 
     dateFormat(date) {
@@ -230,6 +236,7 @@ class Routine {
         this.week += Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
         const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7);
         this.progress += Math.ceil(diffDay / 2.5);
+        if(this.progress > 2) this.progress = 2;
 
         this.setData = this.getSet()[this.progress];
     }

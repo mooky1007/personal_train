@@ -1,16 +1,17 @@
 class PersonalTrainApp {
     #todayOffset = 0;
-    #defaultTrain = [
-        { id: 'pushup', name: '푸쉬업', defaultCount: 15 },
-        { id: 'pullup', name: '풀업', defaultCount: 5 },
-        { id: 'squat', name: '스쿼트', defaultCount: 20 },
-        { id: 'crunch', name: '크런치', defaultCount: 20 },
-        { id: 'slow_buffytest', name: '슬로우버피', defaultCount: 20 },
+    #trainList = [
+        { name: '푸쉬업', trainDay: [1, 3, 5], maximumCnt: 0 },
+        { name: '풀업', trainDay: [2, 4, 6], maximumCnt: 0 },
+        { name: '스쿼트', trainDay: [1, 3, 5], maximumCnt: 0 },
+        { name: '크런치', trainDay: [1, 2, 3, 4, 5, 6], maximumCnt: 0 },
+        { name: '슬로우버피', trainDay: [1, 2, 3, 4, 5, 6], maximumCnt: 0 },
     ];
     constructor() {
         this.userName = '';
-        this.train = this.#defaultTrain;
+        this.train = this.#trainList;
         this.sp = 0;
+        this.routine = {};
 
         this.init();
 
@@ -18,17 +19,17 @@ class PersonalTrainApp {
             el.innerHTML = this[el.dataset.js];
         });
 
-        this.routine = {};
-
         this.train.forEach((train) => {
-            this.routine[train.id] = new Routine({
-                startDate: new Date(),
-                trainName: train.name,
-                userMaxiumCount: train.defaultCount,
+            this.routine[train.name] = new Routine({
+                todayOffset: this.#todayOffset,
+                startDate: this.routine[train.name].startDate,
+                trainName: this.routine[train.name].trainName || train.name,
+                userMaxiumCount: this.routine[train.name].userMaxiumCount || train.maximumCnt,
+                progress: this.routine[train.name].progress,
             });
         });
 
-        const maxLength = Math.max(...Object.values(this.routine).map(el => el.setData.set.length))
+        const maxLength = Math.max(...Object.values(this.routine).map((el) => el.setData.set.length));
 
         Object.values(this.routine).forEach((el) => {
             const table = document.querySelector('table');
@@ -37,16 +38,21 @@ class PersonalTrainApp {
 
             thead.innerHTML = `
               <tr>
-                ${new Array(maxLength + 1).fill().map((el, idx) => {
-                  return `<th>${idx === 0 ? '' : `Set${idx}`}</th>`
-                }).join('')}
+                ${new Array(maxLength + 1)
+                    .fill()
+                    .map((el, idx) => {
+                        return `<th>${idx === 0 ? '' : `Set${idx}`}</th>`;
+                    })
+                    .join('')}
               </tr>
-            `
+            `;
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
             <td>${el.trainName}<br>휴식: ${el.setData.restTime}초</td>
-            ${new Array(maxLength).fill().map((_, idx) => {
+            ${new Array(maxLength)
+                .fill()
+                .map((_, idx) => {
                     if (idx === el.setData.set.length - 1) return `<td>${el.setData.set[idx]} +</td>`;
                     return `<td>${el.setData.set[idx] || '-'}</td>`;
                 })
@@ -201,7 +207,28 @@ class PersonalTrainApp {
 
             resolve();
         });
-        this.data[this.today] = new PersonalTrainDay({ id: this.today });
+
+        let date = new Date();
+        date.setDate(date.getDate() + this.#todayOffset);
+        const todayNum = date.getDay();
+
+        const newTrainConfig = {
+            id: this.today,
+            trainList: {},
+        };
+
+        this.train.forEach((train) => {
+            if (train.trainDay.includes(todayNum)) {
+                newTrainConfig.trainList[train.name] = {
+                    ...train,
+                    count: 0,
+                    targetCount: this.routine[train.name].totalSet,
+                    maximumCnt: 0,
+                };
+            }
+        });
+
+        this.data[this.today] = new PersonalTrainDay(newTrainConfig);
         this.save();
     }
 
@@ -212,10 +239,6 @@ class PersonalTrainApp {
         });
 
         dataArr.forEach((trainItem) => {
-            if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) {
-                delete this.data[trainItem.id];
-                return;
-            }
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
         });
 
@@ -296,7 +319,7 @@ class PersonalTrainApp {
 
     renderTrain() {
         document.querySelectorAll('.float_pannel .row').forEach((el) => el.remove());
-        this.train.forEach((train) => {
+        Object.values(this.data[this.today].trainList).forEach((train) => {
             const div = document.createElement('div');
 
             div.classList.add('row');
@@ -377,15 +400,15 @@ class PersonalTrainApp {
 
         document.querySelector('.today_goal ul').innerHTML = '';
 
-        this.train.forEach((trainItem) => {
+        Object.values(this.data[this.today].trainList).forEach((trainItem) => {
             const li = document.createElement('li');
             const goalCheck =
                 (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
                 (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount);
 
             if (goalCheck) li.style.cssText = `color: #aaa`;
-            li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.id]?.count || 0}/${
-                this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount
+            li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.name]?.count || 0}/${
+                this.data[this.today].trainList[trainItem.name]?.targetCount
             }회${goalCheck ? ` (완료)` : ''}`;
             document.querySelector('.today_goal ul').append(li);
         });
@@ -496,27 +519,19 @@ class PersonalTrainApp {
     addValue = (value, train) => {
         const count = +value;
         if (count === 0) {
-            if (this.data[this.today].trainList[train.id]) {
-                delete this.data[this.today].trainList[train.id];
+            if (this.data[this.today].trainList[train.name]) {
+                delete this.data[this.today].trainList[train.name];
             }
             this.data[this.today].render();
             this.save();
             return;
         }
 
-        if (this.data[this.today].trainList[train.id]) {
-            this.data[this.today].trainList[train.id].count += +count;
-        } else {
-            this.data[this.today].trainList[train.id] = {
-                id: train.id,
-                name: train.name,
-                count: +count,
-                defaultCount: train.defaultCount,
-            };
-        }
+        this.data[this.today].trainList[train.name].count += +count;
 
-        if (this.data[this.today].trainList[train.id].count > train.defaultCount) {
-            train.defaultCount = this.data[this.today].trainList[train.id].count;
+        if (this.data[this.today].trainList[train.name].count >= train.targetCount) {
+            const lastSetCount = this.routine[train.name].setData.set.slice(-1)[0];
+            this.routine[train.name].userMaxiumCount = lastSetCount;
         }
         this.data[this.today].render();
         this.render();
@@ -537,6 +552,7 @@ class PersonalTrainDay {
         this.trainList = config.trainList || {};
         this.userInfor = config.userInfor || null;
         this.calculate = config.calculate || false;
+        this.targetCount = config.calculate || 0;
         this.el = null;
 
         this.dateOption = this.#dateOption;
@@ -563,10 +579,10 @@ class PersonalTrainDay {
                     block.innerHTML = `
                       <span class="train_name">[${this.trainList[key].name}]</span>
                       <span class="train_goal"><span
-                        style="${this.trainList[key].count > this.trainList[key].defaultCount ? 'color: yellow' : ''}"
-                      >${this.trainList[key].count}</span>/${this.trainList[key].defaultCount}회</span>
+                        style="${this.trainList[key].count > this.trainList[key].targetCount ? 'color: yellow' : ''}"
+                      >${this.trainList[key].count}</span>/${this.trainList[key].targetCount}회</span>
                       <span class="gage">
-                          <span class="gage_inner" style="width: ${(this.trainList[key].count / this.trainList[key].defaultCount) * 100}%"></span>
+                          <span class="gage_inner" style="width: ${(this.trainList[key].count / this.trainList[key].targetCount) * 100}%"></span>
                       </span>
                   `;
 
