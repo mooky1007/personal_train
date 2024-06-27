@@ -233,7 +233,7 @@ class Routine {
     };
 
     init() {
-        const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
+        const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7) + 1;
         this.week = diffWeek;
         const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7) - 1;
         this.progress = Math.ceil(diffDay / 2.5);
@@ -244,6 +244,7 @@ class Routine {
 
     getSet() {
         const { userMaxiumCount: count } = this;
+        console.log(`week${this.week}`)
         const data = this.#routineData[`week${this.week}`];
         const { range } = data;
 
