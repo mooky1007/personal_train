@@ -118,6 +118,14 @@ class PersonalTrainApp {
         this.getLocalData();
         await this.createTodayTrain();
 
+        this.userInfor = {
+            age: null,
+            weight: null,
+            height: null,
+            bodyFat: null,
+            muscle: null,
+        };
+
         this.render();
 
         document.querySelector('#continuityCount').innerHTML = this.continuityDay;
