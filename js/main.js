@@ -26,6 +26,10 @@ class PersonalTrainApp {
         return `train_${dateFormat(date)}`;
     }
 
+    addTrain(train) {
+        this.train.push(train);
+    }
+
     get continuityDay() {
         const { data, dateFormat } = this;
 
@@ -83,8 +87,8 @@ class PersonalTrainApp {
         });
 
         document.querySelector('#aside_open').addEventListener('click', () => {
-          document.querySelector('body').classList.toggle('open');
-          this.controlBottomFloat();
+            document.querySelector('body').classList.toggle('open');
+            this.controlBottomFloat();
         });
     }
 
@@ -317,7 +321,7 @@ class PersonalTrainApp {
                 (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
                 (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount);
 
-              if(goalCheck) li.style.cssText = `color: #aaa`;
+            if (goalCheck) li.style.cssText = `color: #aaa`;
             li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.id]?.count || 0}/${
                 this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount
             }회${goalCheck ? ` (완료)` : ''}`;

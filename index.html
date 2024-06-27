@@ -16,7 +16,7 @@
 
 </head>
 
-<body>
+<body class="">
   <main>
     <header>
       <span>🔥 일일 운동 기록부</span>
@@ -83,7 +83,9 @@
     </div>
   </div>
 
-  <aside></aside>
+  <aside>
+    <button id="add-train">+ 운동 추가하기</button>
+  </aside>
 
   <script>
     const ctx = document.getElementById('myChart');
@@ -107,7 +109,7 @@
         },
         y: {
           beginAtZero: true,
-          suggestedMax: 50,
+          suggestedMax: 30,
           ticks: {
             stepSize: 5,
             color: '#ddd',
