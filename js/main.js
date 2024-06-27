@@ -10,8 +10,13 @@ class PersonalTrainApp {
     constructor() {
         this.userName = '';
         this.train = this.#defaultTrain;
+        this.sp = 0;
 
         this.init();
+
+        document.querySelectorAll('[data-js]').forEach((el) => {
+            el.innerHTML = this[el.dataset.js];
+        });
     }
 
     dateFormat(date) {
@@ -61,14 +66,14 @@ class PersonalTrainApp {
     }
 
     get prevUserInfor() {
-        const dataArr = Object.values(this.data).sort((a, b) => new Date(b.date) - new Date(a.date));
+        const dataArr = Object.values(this.data).sort((a, b) => new Date(a.date) - new Date(b.date));
         const userInforArr = dataArr.filter((el) => el.userInfor);
         return userInforArr[1]?.userInfor || null;
     }
 
-    init() {
+    async init() {
         this.getLocalData();
-        this.createTodayTrain();
+        await this.createTodayTrain();
 
         this.render();
 
@@ -101,6 +106,7 @@ class PersonalTrainApp {
             this.createTrainList(data.data);
             this.train = data.train;
             this.userName = data.userName;
+            this.sp = data.sp;
             this.userInfor = data.userInfor || {
                 age: null,
                 weight: null,
@@ -135,8 +141,28 @@ class PersonalTrainApp {
         this.data[this.today].render();
     }
 
-    createTodayTrain() {
+    async createTodayTrain() {
         if (this.data[this.today]) return;
+
+        await new Promise((resolve) => {
+            const sortedData = Object.values(this.data).sort((a, b) => new Date(a.date) - new Date(b.date));
+            const prevData = sortedData[sortedData.length - 1];
+            if (prevData) {
+                if (prevData.calculate) return resolve();
+
+                this.data[prevData.id].calculate = true;
+                const point = Object.values(prevData.trainList).reduce((acc, train) => {
+                    if (train.count > train.defaultCount) {
+                        acc += train.count - train.defaultCount;
+                    }
+                    return acc;
+                }, 0);
+
+                this.sp += point;
+            }
+
+            resolve();
+        });
         this.data[this.today] = new PersonalTrainDay({ id: this.today });
         this.save();
     }
@@ -148,16 +174,14 @@ class PersonalTrainApp {
         });
 
         dataArr.forEach((trainItem) => {
-            if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) return;
+            if ((!trainItem?.trainList || Object.keys(trainItem.trainList).length === 0) && trainItem.id !== this.today) {
+                delete this.data[trainItem.id];
+                return;
+            }
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
-
-            // this.data[trainItem.id].el.addEventListener('click', () => {
-            //     console.log(this.data[trainItem.id]);
-            //     delete this.data[trainItem.id];
-
-            //     this.render();
-            // });
         });
+        
+        this.save();
     }
 
     renderInfor() {
@@ -463,21 +487,23 @@ class PersonalTrainApp {
 }
 
 class PersonalTrainDay {
+    #dateOption = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+    };
     constructor(config) {
         this.id = config.id;
         this.date = config.date || config.id.replace('train_', '');
         this.trainList = config.trainList || {};
         this.userInfor = config.userInfor || null;
+        this.calculate = config.calculate || false;
         this.el = null;
 
-        this.dateOption = {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-        };
+        this.dateOption = this.#dateOption;
 
-        this.render();
+        this.dateOption = this.render();
     }
 
     render() {

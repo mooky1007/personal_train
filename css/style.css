@@ -416,6 +416,8 @@ aside {
 
     display: flex;
     flex-direction: column;
+    color: #fff;
+    gap: 10px;
 }
 
 .open aside {
