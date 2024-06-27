@@ -411,8 +411,8 @@ class PersonalTrainApp {
         Object.values(this.data[this.today].trainList).forEach((trainItem) => {
             const li = document.createElement('li');
             const goalCheck =
-                (this.data[this.today].trainList[trainItem.id]?.count || 0) >=
-                (this.data[this.today].trainList[trainItem.id]?.defaultCount || trainItem.defaultCount);
+                (this.data[this.today].trainList[trainItem.name]?.count || 0) >=
+                (this.data[this.today].trainList[trainItem.name]?.targetCount || trainItem.targetCount);
 
             if (goalCheck) li.style.cssText = `color: #aaa`;
             li.innerHTML = `${trainItem.name}: ${this.data[this.today].trainList[trainItem.name]?.count || 0}/${
