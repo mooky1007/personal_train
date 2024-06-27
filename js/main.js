@@ -22,10 +22,10 @@ class PersonalTrainApp {
         this.train.forEach((train) => {
             this.routine[train.name] = new Routine({
                 todayOffset: this.#todayOffset,
-                startDate: this.routine[train.name].startDate,
-                trainName: this.routine[train.name].trainName || train.name,
-                userMaxiumCount: this.routine[train.name].userMaxiumCount || train.maximumCnt,
-                progress: this.routine[train.name].progress,
+                startDate: this.routine[train.name]?.startDate,
+                trainName: this.routine[train.name]?.trainName || train.name,
+                userMaxiumCount: this.routine[train.name]?.userMaxiumCount || train.maximumCnt,
+                progress: this.routine[train.name]?.progress,
             });
         });
 
