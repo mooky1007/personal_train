@@ -106,7 +106,7 @@ class PersonalTrainApp {
             this.createTrainList(data.data);
             this.train = data.train;
             this.userName = data.userName;
-            this.sp = data.sp;
+            this.sp = data.sp || 0;
             this.userInfor = data.userInfor || {
                 age: null,
                 weight: null,
@@ -180,7 +180,7 @@ class PersonalTrainApp {
             }
             this.data[trainItem.id] = new PersonalTrainDay(trainItem);
         });
-        
+
         this.save();
     }
 
