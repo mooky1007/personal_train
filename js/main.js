@@ -41,7 +41,7 @@ class PersonalTrainApp {
                 ${new Array(maxLength + 1)
                     .fill()
                     .map((el, idx) => {
-                        return `<th>${idx === 0 ? '' : `Set${idx}`}</th>`;
+                        return `<th>${idx === 0 ? '' : `Set ${idx}`}</th>`;
                     })
                     .join('')}
               </tr>

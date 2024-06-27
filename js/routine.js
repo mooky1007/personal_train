@@ -233,9 +233,10 @@ class Routine {
     };
 
     init() {
-        this.week += Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
-        const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7);
-        this.progress += Math.ceil(diffDay / 2.5);
+        const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
+        this.week = diffWeek;
+        const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7) - 1;
+        this.progress = Math.ceil(diffDay / 2.5);
         if(this.progress > 2) this.progress = 2;
 
         this.setData = this.getSet()[this.progress];
