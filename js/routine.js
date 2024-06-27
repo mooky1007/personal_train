@@ -191,7 +191,6 @@ class Routine {
         this.trainName = config.trainName || '';
         this.startDate = config.startDate || new Date();
         this.userMaxiumCount = config.userMaxiumCount || 0;
-        this.week = config.week || 1;
         this.progress = config.progress || 0;
         this.todayOffset = config.todayOffset;
         this.init();
@@ -207,13 +206,13 @@ class Routine {
     }
 
     set week(value) {
-        if (value === this._week) return;
         this._week = value;
+        if (this._week < 1) return (this._week = 1);
         if (this._week > 6) return (this._week = 6);
     }
 
     get totalSet() {
-        return this.getSet()[this.progress].set.reduce((acc, cur) => {
+        return this.setData.set.reduce((acc, cur) => {
             return (acc += cur);
         }, 0);
     }
@@ -227,22 +226,28 @@ class Routine {
         const date1 = new Date(d1);
         const date2 = new Date(d2);
 
+        console.log(this.dateFormat(d1), this.dateFormat(d2))
+
         const diffDate = date1.getTime() - date2.getTime();
 
         return Math.abs(diffDate / (1000 * 60 * 60 * 24));
     };
 
     init() {
-        const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7) + 1;
+        this.getSet();
+        console.log(this.setData.set)
+    }
+    
+    getSet() {
+        console.log('init: ' + this.trainName)
+        const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
+        console.log(`현재주차 : ${diffWeek}`)
         this.week = diffWeek;
         const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7) - 1;
+        console.log(`현재일수 : ${diffDay}`)
         this.progress = Math.ceil(diffDay / 2.5);
         if(this.progress > 2) this.progress = 2;
-
-        this.setData = this.getSet()[this.progress];
-    }
-
-    getSet() {
+        
         const { userMaxiumCount: count } = this;
         console.log(`week${this.week}`)
         const data = this.#routineData[`week${this.week}`];
@@ -259,19 +264,23 @@ class Routine {
 
         if (!rangeIdx) {
             if (count < range[0][0]) {
-                this.week -= 1;
+                console.log(this.startDate)
+                this.startDate = new Date(this.startDate).setDate(new Date(this.startDate).getDate() + 7);
+                console.log(this.startDate)
                 return this.getSet();
             }
             if (range[0][1] < count) {
-                this.week += 1;
+                console.log(this.startDate)
+                this.startDate = new Date(this.startDate).setDate(new Date(this.startDate).getDate() - 7);
+                console.log(this.startDate)
                 return this.getSet();
             }
         }
 
-        return [
+        this.setData =  [
             { set: data.day1.sets[rangeIdx], restTime: data.day1.restSecondEachSet },
             { set: data.day2.sets[rangeIdx], restTime: data.day2.restSecondEachSet },
             { set: data.day3.sets[rangeIdx], restTime: data.day3.restSecondEachSet },
-        ];
+        ][this.progress];
     }
 }
