@@ -1,5 +1,5 @@
 class PersonalTrainApp {
-    #todayOffset = 0;
+    #todayOffset = 4;
     #trainList = [
         { name: '푸쉬업', trainDay: [1, 3, 5] },
         { name: '풀업', trainDay: [2, 4, 6] },
@@ -545,11 +545,11 @@ class PersonalTrainApp {
                     backgroundColor: colors[idx],
                     borderWidth: 1.5,
                     tension: 0.3,
-                    radius: 3,
+                    radius: 4,
                     spanGaps: true,
                     segment: {
                         borderColor: (ctx) => skipped(ctx, `${colors[idx]}dd`) || colors[idx],
-                        borderDash: (ctx) => skipped(ctx, [5, 5]),
+                        borderDash: (ctx) => skipped(ctx, [0,0]),
                     },
                 };
             });
@@ -594,7 +594,7 @@ class PersonalTrainApp {
                     backgroundColor: colors[idx],
                     borderWidth: 1.5,
                     tension: 0.3,
-                    radius: 2.5,
+                    radius: 4,
                     spanGaps: true,
                 };
             });
