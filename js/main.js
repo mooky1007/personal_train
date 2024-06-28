@@ -582,12 +582,7 @@ class PersonalTrainApp {
     addValue = (value, train) => {
         const count = +value;
         if (count === 0) {
-            if (this.data[this.today].trainList[train.name]) {
-                delete this.data[this.today].trainList[train.name];
-            }
-            this.data[this.today].render();
-            this.save();
-            return;
+            this.data[this.today].trainList[train.name].count = 0;
         }
 
         this.data[this.today].trainList[train.name].count += +count;
