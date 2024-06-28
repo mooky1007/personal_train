@@ -65,10 +65,12 @@ class PersonalTrainApp {
         document.querySelector('.float_pannel').classList.toggle('on');
         switch (type) {
             case 'train':
+                this.overView.slideTo(1);
                 this.renderTrain();
                 break;
             case 'infor':
                 document.querySelector('body').classList.toggle('open');
+                this.overView.slideTo(app.overView.slides.length - 1);
                 this.renderInfor();
                 break;
             default:
@@ -114,6 +116,11 @@ class PersonalTrainApp {
         document.querySelector('#aside_open').addEventListener('click', () => {
             document.querySelector('body').classList.toggle('open');
             this.controlBottomFloat();
+        });
+
+        document.querySelector('header span').addEventListener('click', () => {
+          this.overView.slideTo(0);
+          this.controlBottomFloat();
         });
     }
 
