@@ -16,7 +16,7 @@ class PersonalTrainApp {
         this.init();
 
         document.querySelectorAll('[data-js]').forEach((el) => {
-            el.innerHTML = this[el.dataset.js];
+            el.innerHTML = this[el.dataset.js].toLocaleString();
         });
 
         this.train.forEach((train) => {
@@ -42,23 +42,19 @@ class PersonalTrainApp {
         return `train_${dateFormat(date)}`;
     }
 
-    addTrain(train) {
-        this.train.push(train);
+    get todayOrigin() {
+        let date = new Date();
+        date.setDate(date.getDate() + this.#todayOffset);
+        return date.toLocaleDateString('ko-KR', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+        });
     }
 
-    get continuityDay() {
-        const { data, dateFormat } = this;
-
-        let date = new Date();
-        let continuityDay = 1;
-
-        while (true) {
-            date.setDate(date.getDate() - 1);
-            if (data[`train_${dateFormat(date)}`]) continuityDay++;
-            else break;
-        }
-
-        return continuityDay;
+    addTrain(train) {
+        this.train.push(train);
     }
 
     controlBottomFloat(type) {
@@ -98,8 +94,6 @@ class PersonalTrainApp {
         await this.createTodayTrain();
 
         this.render();
-
-        document.querySelector('#continuityCount').innerHTML = this.continuityDay;
 
         document.querySelector('.drop_row').addEventListener('click', (e) => {
             this.controlBottomFloat();
@@ -411,7 +405,7 @@ class PersonalTrainApp {
             const meTitle = '한번에 가능한 최대 횟수';
             const meBLock = document.querySelector('.maximum_effort');
             meBLock.innerHTML = `
-        <p style="font-size: 16px; border-bottom: 1px solid #888; margin-bottom: 10px; padding-bottom: 10px;">${meTitle}</p>
+        <p style="font-size: 16px; border-bottom: 1px solid #444; margin-bottom: 10px; padding-bottom: 10px;">${meTitle}</p>
       `;
 
             Object.values(this.routine).forEach((el) => {

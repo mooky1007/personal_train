@@ -85,7 +85,7 @@ main {
 }
 
 .swiper-slide > div + div {
-    border-top: 1px solid #888;
+    border-top: 1px solid #444;
 }
 
 .point {
