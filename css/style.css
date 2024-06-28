@@ -190,7 +190,7 @@ section {
 }
 
 .float_pannel {
-    z-index: 2;
+    z-index: 3;
     position: fixed;
     bottom: -100%;
     width: 100%;
@@ -259,9 +259,16 @@ section {
 }
 
 .up_btn {
-    width: 100%;
-    padding: 10px 0;
     margin-top: auto;
+    z-index: 2;
+    position: fixed;
+    bottom: 40px;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    font-size: 32px;
+    border-radius: 15px 0 0 15px;
+    border: none;
 }
 
 .infor {
@@ -419,7 +426,7 @@ aside {
     height: calc(100% - 52px);
     width: 95%;
     background: #111;
-    z-index: 3;
+    z-index: 4;
     transition: 0.4s;
     box-shadow: -5px 0 10px rgba(0, 0, 0, 0.5);
     padding: 20px;

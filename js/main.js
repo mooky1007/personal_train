@@ -369,8 +369,7 @@ class PersonalTrainApp {
             ${new Array(maxLength)
                 .fill()
                 .map((_, idx) => {
-                    if (idx === el.setData.set.length - 1) return `<td>${el.setData.set[idx]} +</td>`;
-                    return `<td>${el.setData.set[idx] || '-'}</td>`;
+                    return `<td ${el.reduceProgress(idx) > (this.data[this.today].trainList[el.trainName]?.count || 0) ? '' : 'style="background: rgba(96, 138, 108, 0.3)"'}>${idx === el.setData.set.length - 1 ? `${el.setData.set[idx]} +` : el.setData.set[idx] || '-'}</td>`;
                 })
                 .join('')}
             `;

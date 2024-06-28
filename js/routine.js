@@ -226,24 +226,29 @@ class Routine {
         const date1 = new Date(d1);
         const date2 = new Date(d2);
 
-
         const diffDate = date1.getTime() - date2.getTime();
 
         return Math.abs(diffDate / (1000 * 60 * 60 * 24));
     };
 
+    reduceProgress(idx = 0) {
+        return this.setData.set.slice(0, idx + 1).reduce((acc, cur) => {
+            return (acc += cur);
+        }, 0);
+    }
+
     init() {
         this.getSet();
     }
-    
+
     getSet() {
         const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
         this.week = diffWeek;
         const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7) - 1;
         this.progress = Math.floor(diffDay / 2);
-        if(this.progress < 0) this.progress = 0;
-        if(this.progress > 2) this.progress = 2;
-        
+        if (this.progress < 0) this.progress = 0;
+        if (this.progress > 2) this.progress = 2;
+
         const { userMaxiumCount: count } = this;
         const data = this.#routineData[`week${this.week}`];
         const { range } = data;
@@ -268,7 +273,7 @@ class Routine {
             }
         }
 
-        this.setData =  [
+        this.setData = [
             { set: data.day1.sets[rangeIdx], restTime: data.day1.restSecondEachSet },
             { set: data.day2.sets[rangeIdx], restTime: data.day2.restSecondEachSet },
             { set: data.day3.sets[rangeIdx], restTime: data.day3.restSecondEachSet },
