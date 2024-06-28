@@ -95,7 +95,7 @@ class PersonalTrainApp {
 
         this.render();
 
-        document.querySelector('.drop_row').addEventListener('click', (e) => {
+        document.querySelector('.down_btn').addEventListener('click', (e) => {
             this.controlBottomFloat();
         });
 
@@ -117,17 +117,31 @@ class PersonalTrainApp {
             this.controlBottomFloat();
         });
 
+        document.querySelector('.reset_all').addEventListener('click', () => {
+            window.localStorage.removeItem('train');
+            window.location.reload()
+        });
+
         let posY = 0;
         let lastPosY = 0;
 
-        document.querySelector('.drop_row').addEventListener('touchstart', (e) => {
+        document.querySelector('.float_pannel').addEventListener('touchstart', (e) => {
             posY = e.touches[0].clientY;
         });
 
-        document.querySelector('.drop_row').addEventListener('touchmove', (e) => {
-          lastPosY = e.touches[0].clientY;
-          if(posY < lastPosY - 30) this.controlBottomFloat();
+        document.querySelector('.float_pannel').addEventListener('touchmove', (e) => {
+            lastPosY = e.touches[0].clientY;
+            if (posY < lastPosY - 80) this.controlBottomFloat();
         });
+
+        document.querySelector('aside').addEventListener('touchstart', (e) => {
+          posY = e.touches[0].clientX;
+      });
+
+      document.querySelector('aside').addEventListener('touchmove', (e) => {
+          lastPosY = e.touches[0].clientX;
+          if (posY < lastPosY - 80) document.querySelector('body').classList.remove('open');
+      });
     }
 
     getLocalData() {
