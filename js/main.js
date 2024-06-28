@@ -1,5 +1,5 @@
 class PersonalTrainApp {
-    #todayOffset = 4;
+    #todayOffset = 0;
     #trainList = [
         { name: '푸쉬업', trainDay: [1, 3, 5] },
         { name: '풀업', trainDay: [2, 4, 6] },
