@@ -469,7 +469,7 @@ table td {
     display: flex;
     align-items: center;
     border: none;
-    padding: 6px 20px;
+    padding: 6px 0;
 }
 
 .maximum_effort .row span:first-child {

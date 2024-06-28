@@ -342,44 +342,100 @@ class PersonalTrainApp {
     render() {
         Object.values(this.routine).forEach((el) => el.getSet());
 
-        const maxLength = Math.max(...Object.values(this.routine).map((el) => el.setData.set.length));
-
-        const table = document.querySelector('table');
-        table.innerHTML = '<thead></thead><tbody></tbody>';
-        Object.values(this.routine).forEach((el) => {
-            const thead = table.querySelector('thead');
-            const tbody = table.querySelector('tbody');
-
-            thead.innerHTML = `
-              <tr>
-                ${new Array(maxLength + 1)
-                    .fill()
-                    .map((el, idx) => {
-                        return `<th>${idx === 0 ? '' : `Set ${idx}`}</th>`;
-                    })
-                    .join('')}
-              </tr>
-            `;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-            <td rowspan="2" style="line-height: 1.3;">
-            ${el.trainName}
-            </td>
-            ${new Array(maxLength)
-                .fill()
-                .map((_, idx) => {
-                    return `<td ${el.reduceProgress(idx) > (this.data[this.today].trainList[el.trainName]?.count || 0) ? '' : 'style="background: rgba(96, 138, 108, 0.3)"'}>${idx === el.setData.set.length - 1 ? `${el.setData.set[idx]} +` : el.setData.set[idx] || '-'}</td>`;
+        const maxLength = Math.max(
+            ...Object.values(this.routine)
+                .filter((el) => {
+                    return Object.keys(this.data[this.today].trainList).includes(el.trainName);
                 })
-                .join('')}
-            `;
+                .map((el) => el.setData.set.length)
+        );
 
-            const tr2 = document.createElement('tr');
-            tr2.innerHTML = `
-                <td colspan="${maxLength}" style="color: #ccc;font-size:8px;">세트간 휴식시간: ${el.setData.restTime}초 (필요하다면 더 쉬어도됩니다.)</td>
-            `;
-            tbody.append(tr, tr2);
-        });
+        if (!Number.isInteger(maxLength)) {
+            this.overView.slides[1].style.display = 'none';
+            this.overView.slides[2].style.display = 'none';
+            document.querySelector('.up_btn').style.display = 'none';
+            this.overView.update();
+        } else {
+            const table = document.querySelector('table');
+            table.innerHTML = '<thead></thead><tbody></tbody>';
+            Object.values(this.routine)
+                .filter((el) => {
+                    return Object.keys(this.data[this.today].trainList).includes(el.trainName);
+                })
+                .forEach((el) => {
+                    const thead = table.querySelector('thead');
+                    const tbody = table.querySelector('tbody');
+
+                    thead.innerHTML = `
+                <tr>
+                  ${new Array(maxLength + 1)
+                      .fill()
+                      .map((el, idx) => {
+                          return `<th>${idx === 0 ? '' : `Set ${idx}`}</th>`;
+                      })
+                      .join('')}
+                </tr>
+              `;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+              <td rowspan="2" style="line-height: 1.3;">
+              ${el.trainName}
+              </td>
+              ${new Array(maxLength)
+                  .fill()
+                  .map((_, idx) => {
+                      return `<td ${
+                          el.reduceProgress(idx) > (this.data[this.today].trainList[el.trainName]?.count || 0)
+                              ? ''
+                              : 'style="background: rgba(96, 138, 108, 0.3)"'
+                      }>${idx === el.setData.set.length - 1 ? `${el.setData.set[idx]} +` : el.setData.set[idx] || '-'}</td>`;
+                  })
+                  .join('')}
+              `;
+
+                    const tr2 = document.createElement('tr');
+                    tr2.innerHTML = `
+                  <td colspan="${maxLength}" style="color: #ccc;font-size:8px;">세트간 휴식시간: ${el.setData.restTime}초 (필요하다면 더 쉬어도됩니다.)</td>
+              `;
+                    tbody.append(tr, tr2);
+                });
+
+            const meTitle = '한번에 가능한 최대 횟수';
+            const meBLock = document.querySelector('.maximum_effort');
+            meBLock.innerHTML = `
+        <p style="font-size: 16px; border-bottom: 1px solid #888; margin-bottom: 10px; padding-bottom: 10px;">${meTitle}</p>
+      `;
+
+            Object.values(this.routine).forEach((el) => {
+                const div = document.createElement('div');
+                div.classList.add('row');
+
+                div.innerHTML = `
+            <span>[${el.trainName}]</span>
+            <span>${el.userMaxiumCount}회</span>
+            <div class="button_wrap">
+              <button role="plus">+</button>
+              <button role="minus">-</button>
+            </div>`;
+
+                div.querySelectorAll('button').forEach((button) => {
+                    button.addEventListener('click', (e) => {
+                        if (e.target.getAttribute('role') === 'plus') el.userMaxiumCount += 1;
+                        if (e.target.getAttribute('role') === 'minus') el.userMaxiumCount -= 1;
+
+                        if (el.userMaxiumCount < 0) el.userMaxiumCount = 0;
+
+                        const result = this.data[this.today].trainList[el.trainName];
+                        if (result) result.targetCount = el.totalSet;
+
+                        this.render();
+                    });
+                });
+
+                meBLock.append(div);
+            });
+        }
 
         if (this.prevUserInfor && +this.userInfor.weight !== +this.prevUserInfor.weight) {
             const diff = +this.userInfor.weight - +this.prevUserInfor.weight;
@@ -440,41 +496,6 @@ class PersonalTrainApp {
             document.querySelector('.today_goal ul').append(li);
         }
 
-        const meTitle = '한번에 가능한 최대 횟수';
-        const meBLock = document.querySelector('.maximum_effort');
-        meBLock.innerHTML = `
-        <p style="font-size: 16px; border-bottom: 1px solid #888; margin-bottom: 10px; padding-bottom: 10px;">${meTitle}</p>
-      `;
-
-        Object.values(this.routine).forEach((el) => {
-            const div = document.createElement('div');
-            div.classList.add('row');
-
-            div.innerHTML = `
-            <span>[${el.trainName}]</span>
-            <span>${el.userMaxiumCount}회</span>
-            <div class="button_wrap">
-              <button role="plus">+</button>
-              <button role="minus">-</button>
-            </div>`;
-
-            div.querySelectorAll('button').forEach((button) => {
-                button.addEventListener('click', (e) => {
-                    if (e.target.getAttribute('role') === 'plus') el.userMaxiumCount += 1;
-                    if (e.target.getAttribute('role') === 'minus') el.userMaxiumCount -= 1;
-
-                    if (el.userMaxiumCount < 0) el.userMaxiumCount = 0;
-
-                    const result = this.data[this.today].trainList[el.trainName];
-                    if (result) result.targetCount = el.totalSet;
-
-                    this.render();
-                });
-            });
-
-            meBLock.append(div);
-        });
-
         this.renderChart();
 
         this.createTrainList(this.data);
@@ -499,7 +520,7 @@ class PersonalTrainApp {
                     radius: 3,
                     spanGaps: true,
                     segment: {
-                        borderColor: (ctx) => skipped(ctx, `${colors[idx]}33`) || colors[idx],
+                        borderColor: (ctx) => skipped(ctx, `${colors[idx]}dd`) || colors[idx],
                         borderDash: (ctx) => skipped(ctx, [5, 5]),
                     },
                 };
