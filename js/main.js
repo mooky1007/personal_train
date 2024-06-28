@@ -119,8 +119,8 @@ class PersonalTrainApp {
         });
 
         document.querySelector('header span').addEventListener('click', () => {
-          this.overView.slideTo(0);
-          this.controlBottomFloat();
+            this.overView.slideTo(0);
+            this.controlBottomFloat();
         });
     }
 
