@@ -119,11 +119,17 @@ class PersonalTrainApp {
 
         document.querySelector('.reset_all').addEventListener('click', () => {
             window.localStorage.removeItem('train');
-            window.location.reload()
+            window.location.reload();
         });
 
         let posY = 0;
         let lastPosY = 0;
+
+        let posX = 0;
+        let lastPosX = 0;
+
+        let posX2 = 0;
+        let lastPosX2 = 0;
 
         document.querySelector('.float_pannel').addEventListener('touchstart', (e) => {
             posY = e.touches[0].clientY;
@@ -135,13 +141,22 @@ class PersonalTrainApp {
         });
 
         document.querySelector('aside').addEventListener('touchstart', (e) => {
-          posY = e.touches[0].clientX;
-      });
+            posX = e.touches[0].clientX;
+        });
 
-      document.querySelector('aside').addEventListener('touchmove', (e) => {
-          lastPosY = e.touches[0].clientX;
-          if (posY < lastPosY - 80) document.querySelector('body').classList.remove('open');
-      });
+        document.querySelector('aside').addEventListener('touchmove', (e) => {
+            lastPosX = e.touches[0].clientX;
+            if (posX < lastPosX - 80) document.querySelector('body').classList.remove('open');
+        });
+
+        document.querySelector('.data_list').addEventListener('touchstart', (e) => {
+            posX2 = e.touches[0].clientX;
+        });
+
+        document.querySelector('.data_list').addEventListener('touchmove', (e) => {
+            lastPosX2 = e.touches[0].clientX;
+            if (posX2 > lastPosX2 + 160) document.querySelector('body').classList.add('open');
+        });
     }
 
     getLocalData() {
@@ -243,7 +258,7 @@ class PersonalTrainApp {
         });
 
         dataArr.forEach((trainItem, idx) => {
-            if(idx < 12) this.data[trainItem.id] = new PersonalTrainDay(trainItem);
+            if (idx < 12) this.data[trainItem.id] = new PersonalTrainDay(trainItem);
             else this.data[trainItem.id] = trainItem;
         });
 
@@ -549,7 +564,7 @@ class PersonalTrainApp {
                     spanGaps: true,
                     segment: {
                         borderColor: (ctx) => skipped(ctx, `${colors[idx]}dd`) || colors[idx],
-                        borderDash: (ctx) => skipped(ctx, [0,0]),
+                        borderDash: (ctx) => skipped(ctx, [0, 0]),
                     },
                 };
             });
