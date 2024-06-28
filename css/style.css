@@ -160,8 +160,8 @@ section {
     width: 100%;
     padding: 10px 0;
     margin-top: 10px;
-    color: #fff;
-    background: #000;
+    color: #000;
+    background: #fff;
 }
 
 .gage {
@@ -189,7 +189,7 @@ section {
     max-width: 480px;
     min-height: 240px;
 
-    padding: 20px;
+    padding: 20px 20px 40px 20px;
     color: #fff;
     background: #222;
     border-radius: 20px 20px 0 0;
@@ -408,7 +408,7 @@ aside {
     right: -100%;
     top: 52px;
     height: calc(100% - 52px);
-    width: 90%;
+    width: 95%;
     background: #111;
     z-index: 3;
     transition: 0.4s;

@@ -28,46 +28,6 @@ class PersonalTrainApp {
                 progress: this.routine[train.name]?.progress,
             });
         });
-
-        const maxLength = Math.max(...Object.values(this.routine).map((el) => el.setData.set.length));
-
-        Object.values(this.routine).forEach((el) => {
-            const table = document.querySelector('table');
-            const thead = table.querySelector('thead');
-            const tbody = table.querySelector('tbody');
-
-            thead.innerHTML = `
-              <tr>
-                ${new Array(maxLength + 1)
-                    .fill()
-                    .map((el, idx) => {
-                        return `<th>${idx === 0 ? '' : `Set ${idx}`}</th>`;
-                    })
-                    .join('')}
-              </tr>
-            `;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-            <td rowspan="2" style="line-height: 1.3;">
-            Lv. ${((el.week - 1) * 3) + el.progress + 1}<br>
-            ${el.trainName}
-            </td>
-            ${new Array(maxLength)
-                .fill()
-                .map((_, idx) => {
-                    if (idx === el.setData.set.length - 1) return `<td>${el.setData.set[idx]} +</td>`;
-                    return `<td>${el.setData.set[idx] || '-'}</td>`;
-                })
-                .join('')}
-            `;
-
-            const tr2 = document.createElement('tr');
-            tr2.innerHTML = `
-                <td colspan="${maxLength}" style="font-size:8px;">세트간 휴식시간: ${el.setData.restTime}초 (필요하다면 더 쉬어도됩니다.)</td>
-            `;
-            tbody.append(tr, tr2);
-        });
     }
 
     dateFormat(date) {
@@ -108,6 +68,7 @@ class PersonalTrainApp {
                 this.renderTrain();
                 break;
             case 'infor':
+                document.querySelector('body').classList.toggle('open');
                 this.renderInfor();
                 break;
             default:
@@ -313,7 +274,8 @@ class PersonalTrainApp {
           width: 100%;
           background: #000;
           color: #fff;
-          margin-top: 20px;
+          position: relative;
+          top: 20px;
         `;
 
         saveButton.querySelector('button').addEventListener('click', () => {
@@ -379,6 +341,47 @@ class PersonalTrainApp {
 
     render() {
         Object.values(this.routine).forEach((el) => el.getSet());
+
+        const maxLength = Math.max(...Object.values(this.routine).map((el) => el.setData.set.length));
+
+        const table = document.querySelector('table');
+        table.innerHTML = '<thead></thead><tbody></tbody>';
+        Object.values(this.routine).forEach((el) => {
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+
+            thead.innerHTML = `
+              <tr>
+                ${new Array(maxLength + 1)
+                    .fill()
+                    .map((el, idx) => {
+                        return `<th>${idx === 0 ? '' : `Set ${idx}`}</th>`;
+                    })
+                    .join('')}
+              </tr>
+            `;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td rowspan="2" style="line-height: 1.3;">
+            Lv. ${(el.week - 1) * 3 + el.progress + 1}<br>
+            ${el.trainName}
+            </td>
+            ${new Array(maxLength)
+                .fill()
+                .map((_, idx) => {
+                    if (idx === el.setData.set.length - 1) return `<td>${el.setData.set[idx]} +</td>`;
+                    return `<td>${el.setData.set[idx] || '-'}</td>`;
+                })
+                .join('')}
+            `;
+
+            const tr2 = document.createElement('tr');
+            tr2.innerHTML = `
+                <td colspan="${maxLength}" style="font-size:8px;">세트간 휴식시간: ${el.setData.restTime}초 (필요하다면 더 쉬어도됩니다.)</td>
+            `;
+            tbody.append(tr, tr2);
+        });
 
         if (this.prevUserInfor && +this.userInfor.weight !== +this.prevUserInfor.weight) {
             const diff = +this.userInfor.weight - +this.prevUserInfor.weight;
@@ -465,7 +468,7 @@ class PersonalTrainApp {
                     if (el.userMaxiumCount < 0) el.userMaxiumCount = 0;
 
                     const result = this.data[this.today].trainList[el.trainName];
-                    if(result) result.targetCount = el.totalSet;
+                    if (result) result.targetCount = el.totalSet;
 
                     this.render();
                 });
