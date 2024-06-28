@@ -226,7 +226,6 @@ class Routine {
         const date1 = new Date(d1);
         const date2 = new Date(d2);
 
-        console.log(this.dateFormat(d1), this.dateFormat(d2))
 
         const diffDate = date1.getTime() - date2.getTime();
 
@@ -235,21 +234,17 @@ class Routine {
 
     init() {
         this.getSet();
-        console.log(this.setData.set)
     }
     
     getSet() {
-        console.log('init: ' + this.trainName)
         const diffWeek = Math.ceil(this.getDateDiff(this.today, this.startDate) / 7);
-        console.log(`현재주차 : ${diffWeek}`)
         this.week = diffWeek;
         const diffDay = Math.ceil(this.getDateDiff(this.today, this.startDate) % 7) - 1;
-        console.log(`현재일수 : ${diffDay}`)
-        this.progress = Math.ceil(diffDay / 2.5);
+        this.progress = Math.floor(diffDay / 2);
+        if(this.progress < 0) this.progress = 0;
         if(this.progress > 2) this.progress = 2;
         
         const { userMaxiumCount: count } = this;
-        console.log(`week${this.week}`)
         const data = this.#routineData[`week${this.week}`];
         const { range } = data;
 
@@ -264,15 +259,11 @@ class Routine {
 
         if (!rangeIdx) {
             if (count < range[0][0]) {
-                console.log(this.startDate)
                 this.startDate = new Date(this.startDate).setDate(new Date(this.startDate).getDate() + 7);
-                console.log(this.startDate)
                 return this.getSet();
             }
             if (range[0][1] < count) {
-                console.log(this.startDate)
                 this.startDate = new Date(this.startDate).setDate(new Date(this.startDate).getDate() - 7);
-                console.log(this.startDate)
                 return this.getSet();
             }
         }

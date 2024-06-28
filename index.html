@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔥 일일 운동 기록부</title>
+  <title>🔥오운완🔥</title>
   <link rel="manifest" href="./manifest.json?update=2406280043">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
 
@@ -33,7 +33,7 @@
         <div class="swiper-slide">
           <div class="continuityDay">
             <strong id="username"></strong>님,<br>
-            <strong id="continuityCount">0</strong>일 연속 도전중!
+            <strong id="continuityCount">0</strong>일 연속 기록중!
           </div>
 
           <div class="today_goal">
@@ -59,7 +59,6 @@
         </div>
 
         <div class="swiper-slide">
-          추천 루틴
           <table>
             <colgroup>
               <col width="60">
@@ -71,12 +70,15 @@
           </table>
         </div>
 
-        <div class="swiper-slide">
-          <canvas id="myChart" height="180"></canvas>
+        <div class="swiper-slide maximum_effort">
         </div>
 
         <div class="swiper-slide">
-          <canvas id="myChart2" height="180"></canvas>
+          <canvas id="myChart" height="190"></canvas>
+        </div>
+
+        <div class="swiper-slide">
+          <canvas id="myChart2" height="190"></canvas>
         </div>
       </div>
       <div class="swiper-button-prev"></div>
@@ -174,19 +176,21 @@
       options: options
     });
 
-    const app = new PersonalTrainApp();
-    app.chart = chart;
-    app.chart2 = chart2;
-
-    app.renderChart();
-
-    new Swiper('.swiper', {
+    const overview = new Swiper('.swiper', {
+      initialSlide: 0,
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
 
     })
+
+    const app = new PersonalTrainApp();
+    app.chart = chart;
+    app.chart2 = chart2;
+    app.overView = overview;
+
+    app.renderChart();
   </script>
 </body>
 
