@@ -116,6 +116,18 @@ class PersonalTrainApp {
             this.overView.slideTo(0);
             this.controlBottomFloat();
         });
+
+        let posY = 0;
+        let lastPosY = 0;
+
+        document.querySelector('.drop_row').addEventListener('touchstart', (e) => {
+            posY = e.touches[0].clientY;
+        });
+
+        document.querySelector('.drop_row').addEventListener('touchmove', (e) => {
+          lastPosY = e.touches[0].clientY;
+          if(posY < lastPosY - 30) this.controlBottomFloat();
+        });
     }
 
     getLocalData() {

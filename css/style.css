@@ -197,7 +197,7 @@ section {
     max-width: 480px;
     min-height: 240px;
 
-    padding: 20px 20px 40px 20px;
+    padding: 0 20px 40px 20px;
     color: #fff;
     background: #222;
     border-radius: 20px 20px 0 0;
@@ -245,6 +245,7 @@ section {
     justify-content: center;
     align-items: center;
     padding: 15px 0;
+    margin-bottom: 20px;
 }
 
 .down_btn {
@@ -254,8 +255,6 @@ section {
     border-bottom: 2px solid #fff;
     transform: rotate(45deg);
     transform-origin: center;
-    position: relative;
-    bottom: 15px;
 }
 
 .up_btn {
