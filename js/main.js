@@ -49,9 +49,9 @@ class PersonalTrainApp {
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-            <td rowspan="2">
-            ${el.trainName}<br>
-            ${el.week}주치 ${el.progress + 1}회
+            <td rowspan="2" style="line-height: 1.3;">
+            Lv. ${((el.week - 1) * 3) + el.progress + 1}<br>
+            ${el.trainName}
             </td>
             ${new Array(maxLength)
                 .fill()
