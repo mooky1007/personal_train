@@ -364,7 +364,6 @@ class PersonalTrainApp {
             const tr = document.createElement('tr');
             tr.innerHTML = `
             <td rowspan="2" style="line-height: 1.3;">
-            Lv. ${(el.week - 1) * 3 + el.progress + 1}<br>
             ${el.trainName}
             </td>
             ${new Array(maxLength)
@@ -378,7 +377,7 @@ class PersonalTrainApp {
 
             const tr2 = document.createElement('tr');
             tr2.innerHTML = `
-                <td colspan="${maxLength}" style="font-size:8px;">세트간 휴식시간: ${el.setData.restTime}초 (필요하다면 더 쉬어도됩니다.)</td>
+                <td colspan="${maxLength}" style="color: #ccc;font-size:8px;">세트간 휴식시간: ${el.setData.restTime}초 (필요하다면 더 쉬어도됩니다.)</td>
             `;
             tbody.append(tr, tr2);
         });
@@ -498,7 +497,7 @@ class PersonalTrainApp {
                     backgroundColor: colors[idx],
                     borderWidth: 1.5,
                     tension: 0.3,
-                    radius: 2.5,
+                    radius: 3,
                     spanGaps: true,
                     segment: {
                         borderColor: (ctx) => skipped(ctx, `${colors[idx]}33`) || colors[idx],

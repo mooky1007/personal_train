@@ -5,13 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🔥오운완🔥</title>
-  <link rel="manifest" href="./manifest.json?update=2406281040">
+  <link rel="manifest" href="./manifest.json?update=2406281154">
   <link rel="shortcut icon" href="./images/shortcut.png" type="image/x-icon">
-1104
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="./css/style.css?update=2406281040">
-  <script src="./js/main.js?update=2406281040"></script>
-  <script src="./js/routine.js?update=2406281040"></script>
+  <link rel="stylesheet" href="./css/style.css?update=2406281154">
+  <script src="./js/main.js?update=2406281154"></script>
+  <script src="./js/routine.js?update=2406281154"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -74,13 +73,14 @@
         </div>
 
         <div class="swiper-slide">
-          <canvas id="myChart" height="190"></canvas>
+          <canvas id="myChart" height="200"></canvas>
         </div>
 
         <div class="swiper-slide">
-          <canvas id="myChart2" height="190"></canvas>
+          <canvas id="myChart2" height="200"></canvas>
         </div>
       </div>
+      <div class="swiper-pagination"></div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </section>
@@ -153,6 +153,15 @@
               size: 10,
             }
           }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(tooltipItem) {
+              var value = null;
+              if (tooltipItem.formattedValue > 0) value = `${tooltipItem.dataset.label}: ${tooltipItem.formattedValue}`
+              return value;
+            },
+          },
         }
       }
     }
@@ -177,6 +186,10 @@
 
     const overview = new Swiper('.swiper', {
       initialSlide: 0,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
