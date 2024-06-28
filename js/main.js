@@ -242,8 +242,9 @@ class PersonalTrainApp {
             return new Date(b.date) - new Date(a.date);
         });
 
-        dataArr.forEach((trainItem) => {
-            this.data[trainItem.id] = new PersonalTrainDay(trainItem);
+        dataArr.forEach((trainItem, idx) => {
+            if(idx < 12) this.data[trainItem.id] = new PersonalTrainDay(trainItem);
+            else this.data[trainItem.id] = trainItem;
         });
 
         this.save();
